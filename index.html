@@ -263,6 +263,10 @@ var PageFlipper = function(pages) {
     return pages.children('.page-wrap.turned').first();
   };
 
+  this.IsLastPage = function(el) {
+    return el.prev().length === 0;
+  };
+
   //  Remove element from DOM and unbind
   this.RemoveElement = function(e) {
     var el = $(e.target);
@@ -300,7 +304,7 @@ var PageFlipper = function(pages) {
       pages = this.pages,
       self = this;
     
-    if (el.get(0)) {
+    if (el.get(0) && !this.IsLastPage(el)) {
       pages.append(back);
       pages.append(fold);
 
