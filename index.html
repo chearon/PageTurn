@@ -74,6 +74,8 @@ html, body {
   top: 0;
   padding: 20px;
   position: absolute;
+  height: 100%;
+  overflow: scroll;
 }
 
 .pages>.back-wrap {
@@ -311,7 +313,7 @@ var PageFlipper = function(pages) {
   };
 };
 
-var flipper = new PageFlipper($('.pages)),
+var flipper = new PageFlipper($('.pages'));
 
 $('#next').bind('click', function() {
   flipper.NextPage();
