@@ -228,6 +228,8 @@ html, body {
 </style>
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 <script>
+jQuery(function($) {
+
 var PageFlipper = function(pages) {
   this.pages = pages;
 
@@ -304,19 +306,19 @@ var PageFlipper = function(pages) {
   };
 };
 
-window.addEventListener('load', function() {
-  var pageset1 = $('.pages'),
-    flipper1 = new PageFlipper(pageset1),
-    next = $('#next'),
-    prev = $('#prev');
+var pageset1 = $('.pages'),
+  flipper1 = new PageFlipper(pageset1),
+  next = $('#next'),
+  prev = $('#prev');
 
-  next.bind('click', function() {
-    flipper1.NextPage();
-  });
-  prev.bind('click', function() {
-    flipper1.PreviousPage();
-  });
+next.bind('click', function() {
+  flipper1.NextPage();
 });
+prev.bind('click', function() {
+  flipper1.PreviousPage();
+});
+
+}); // jQuery
 </script>
 </head>
 <body>
