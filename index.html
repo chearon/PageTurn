@@ -233,6 +233,7 @@ jQuery(function($) {
 var PageFlipper = function(pages) {
   this.pages = pages;
 
+  //  Create a blank back page with correct CSS class according to turned
   this.MakeBackPage = function(turned) {
     var r = $('<div />').addClass('back-wrap')
       .addClass(turned ? 'reverse-transition' : '')
@@ -241,6 +242,7 @@ var PageFlipper = function(pages) {
     return r;
   };
 
+  //  Create shading element for edge between folded page and page below
   this.MakeFold = function(turned) {
     var r = $('<div />').addClass('fold-wrap')
       .addClass(turned ? 'reverse-transition' : '')
@@ -259,6 +261,7 @@ var PageFlipper = function(pages) {
     return pages.children('.page-wrap.turned').first();
   };
 
+  //  Remove element from DOM and unbind
   this.RemoveElement = function(e) {
     var el = $(e.target);
     if ((el.hasClass('back-wrap') || el.hasClass('fold-wrap')) && el.parent().length) {
@@ -267,6 +270,7 @@ var PageFlipper = function(pages) {
     }
   };
 
+  //  Animate page turn to back one page
   this.PreviousPage = function() {
     var el = this.GetTopPageLeft(),
       back = this.MakeBackPage(true),
@@ -286,6 +290,7 @@ var PageFlipper = function(pages) {
     }
   };
 
+  //  Animate a page turn forward
   this.NextPage = function() {
     var el = this.GetTopPageRight(),
       back = this.MakeBackPage(false),
@@ -306,16 +311,14 @@ var PageFlipper = function(pages) {
   };
 };
 
-var pageset1 = $('.pages'),
-  flipper1 = new PageFlipper(pageset1),
-  next = $('#next'),
-  prev = $('#prev');
+var flipper = new PageFlipper($('.pages)),
 
-next.bind('click', function() {
-  flipper1.NextPage();
+$('#next').bind('click', function() {
+  flipper.NextPage();
 });
-prev.bind('click', function() {
-  flipper1.PreviousPage();
+
+$('#prev').bind('click', function() {
+  flipper.PreviousPage();
 });
 
 }); // jQuery
