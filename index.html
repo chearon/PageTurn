@@ -295,7 +295,6 @@ var PageFlipper = function(pages) {
       pages.append(back);
       pages.append(fold);
 
-      var self = this;
       setTimeout(function() {
         el.addClass('turned');
         back.addClass('turned').bind("webkitTransitionEnd", self.RemoveElement);
