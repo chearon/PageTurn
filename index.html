@@ -278,11 +278,8 @@ var PageFlipper = function(pages) {
       
       setTimeout(function() {
         el.removeClass('turned');
-        back.removeClass('turned');
-        fold.removeClass('turned');
-
-        back.bind("webkitTransitionEnd", self.RemoveElement);
-        fold.bind("webkitTransitionEnd", self.RemoveElement);
+        back.removeClass('turned').bind("webkitTransitionEnd", self.RemoveElement);
+        fold.removeClass('turned').bind("webkitTransitionEnd", self.RemoveElement);
       }, 0);
     }
   };
@@ -301,11 +298,8 @@ var PageFlipper = function(pages) {
       var self = this;
       setTimeout(function() {
         el.addClass('turned');
-        back.addClass('turned');
-        fold.addClass('turned');
-
-        back.bind("webkitTransitionEnd", self.RemoveElement);
-        fold.bind("webkitTransitionEnd", self.RemoveElement);
+        back.addClass('turned').bind("webkitTransitionEnd", self.RemoveElement);
+        fold.addClass('turned').bind("webkitTransitionEnd", self.RemoveElement);
       }, 0);
     }
   };
