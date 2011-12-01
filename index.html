@@ -263,8 +263,29 @@ var PageFlipper = function(pages) {
     return pages.children('.page-wrap.turned').first();
   };
 
+  //  Is this the last page?  True if it as at the top of the list
   this.IsLastPage = function(el) {
     return el.prev().length === 0;
+  };
+
+  //  Add the element for the animated back page on top of all other back pages
+  this.AddBackPageTop = function(el) {
+    var backPage = this.pages.find('.back-wrap'),
+      shader = this.pages.find('.fold-wrap');
+    if (backPage.length) {
+      backPage.before(el);
+    }
+    else if (shader.length) {
+      shader.before(el);
+    }
+    else {
+      this.pages.append(el);
+    }
+  };
+
+  //  Add the animated back page under all animated back pages
+  this.AddBackPageBottom = function(el) {
+    this.pages.append(el);
   };
 
   //  Remove element from DOM and unbind
@@ -285,8 +306,8 @@ var PageFlipper = function(pages) {
       self = this;
 
     if (el.get(0)) {
-      pages.append(back);
-      pages.append(fold);
+      this.AddBackPageTop(back);
+      this.AddBackPageTop(fold);
       
       setTimeout(function() {
         el.removeClass('turned');
@@ -305,8 +326,8 @@ var PageFlipper = function(pages) {
       self = this;
     
     if (el.get(0) && !this.IsLastPage(el)) {
-      pages.append(back);
-      pages.append(fold);
+      this.AddBackPageBottom(back);
+      this.AddBackPageBottom(fold);
 
       setTimeout(function() {
         el.addClass('turned');
