@@ -13,9 +13,12 @@ html, body {
 }
 
 #container {
-  position: relative;
   overflow: visible;
-  z-index: 0;
+  position: absolute;
+  width: 100%;
+  height: 700px;
+  left: 0;
+  top: 0;
 }
 
 #container>.pages {
@@ -71,6 +74,8 @@ html, body {
   top: 0;
   padding: 20px;
   position: absolute;
+  height: 100%;
+  overflow: scroll;
 }
 
 .pages>.back-wrap {
@@ -225,9 +230,12 @@ html, body {
 </style>
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 <script>
+jQuery(function($) {
+
 var PageFlipper = function(pages) {
   this.pages = pages;
 
+  //  Create a blank back page with correct CSS class according to turned
   this.MakeBackPage = function(turned) {
     var r = $('<div />').addClass('back-wrap')
       .addClass(turned ? 'reverse-transition' : '')
@@ -236,6 +244,7 @@ var PageFlipper = function(pages) {
     return r;
   };
 
+  //  Create shading element for edge between folded page and page below
   this.MakeFold = function(turned) {
     var r = $('<div />').addClass('fold-wrap')
       .addClass(turned ? 'reverse-transition' : '')
@@ -254,6 +263,28 @@ var PageFlipper = function(pages) {
     return pages.children('.page-wrap.turned').first();
   };
 
+  //  Is this the last page?  True if it as at the top of the list
+  this.IsLastPage = function(el) {
+    return el.prev().length === 0;
+  };
+
+  //  Add the white back page and fold shading on top of all other back pages
+  this.AddBackPageTop = function(back, fold) {
+    var backPage = this.pages.find('.back-wrap').first();
+    if (backPage.length) {
+      backPage.before(fold).before(back);
+    }
+    else {
+      this.pages.append(back).append(fold);
+    }
+  };
+
+  //  Add the animated back page under all animated back pages
+  this.AddBackPageBottom = function(el) {
+    this.pages.append(el);
+  };
+
+  //  Remove element from DOM and unbind
   this.RemoveElement = function(e) {
     var el = $(e.target);
     if ((el.hasClass('back-wrap') || el.hasClass('fold-wrap')) && el.parent().length) {
@@ -262,6 +293,7 @@ var PageFlipper = function(pages) {
     }
   };
 
+  //  Animate page turn to back one page
   this.PreviousPage = function() {
     var el = this.GetTopPageLeft(),
       back = this.MakeBackPage(true),
@@ -270,20 +302,17 @@ var PageFlipper = function(pages) {
       self = this;
 
     if (el.get(0)) {
-      pages.append(back);
-      pages.append(fold);
+      this.AddBackPageTop(back, fold);
       
       setTimeout(function() {
         el.removeClass('turned');
-        back.removeClass('turned');
-        fold.removeClass('turned');
-
-        back.bind("webkitTransitionEnd", self.RemoveElement);
-        fold.bind("webkitTransitionEnd", self.RemoveElement);
-      }, 10);
+        back.removeClass('turned').bind("webkitTransitionEnd", self.RemoveElement);
+        fold.removeClass('turned').bind("webkitTransitionEnd", self.RemoveElement);
+      }, 0);
     }
   };
 
+  //  Animate a page turn forward
   this.NextPage = function() {
     var el = this.GetTopPageRight(),
       back = this.MakeBackPage(false),
@@ -291,36 +320,30 @@ var PageFlipper = function(pages) {
       pages = this.pages,
       self = this;
     
-    if (el.get(0)) {
-      pages.append(back);
-      pages.append(fold);
+    if (el.get(0) && !this.IsLastPage(el)) {
+      this.AddBackPageBottom(back);
+      this.AddBackPageBottom(fold);
 
-      var self = this;
       setTimeout(function() {
         el.addClass('turned');
-        back.addClass('turned');
-        fold.addClass('turned');
-
-        back.bind("webkitTransitionEnd", self.RemoveElement);
-        fold.bind("webkitTransitionEnd", self.RemoveElement);
-      }, 10);
+        back.addClass('turned').bind("webkitTransitionEnd", self.RemoveElement);
+        fold.addClass('turned').bind("webkitTransitionEnd", self.RemoveElement);
+      }, 0);
     }
   };
 };
 
-window.addEventListener('load', function() {
-  var pageset1 = $('.pages'),
-    flipper1 = new PageFlipper(pageset1),
-    next = $('#next'),
-    prev = $('#prev');
+var flipper = new PageFlipper($('.pages'));
 
-  next.bind('click', function() {
-    flipper1.NextPage();
-  });
-  prev.bind('click', function() {
-    flipper1.PreviousPage();
-  });
+$('#next').bind('click', function() {
+  flipper.NextPage();
 });
+
+$('#prev').bind('click', function() {
+  flipper.PreviousPage();
+});
+
+}); // jQuery
 </script>
 </head>
 <body>
