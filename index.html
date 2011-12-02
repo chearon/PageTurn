@@ -9,10 +9,12 @@
 }
 
 html, body {
-  background-color: #888;
+  background: -webkit-gradient(linear, left top, right bottom, from(#CCC), to(#FFF));
   font-family: sans-serif;
   margin: 0;
   padding: 0;
+  width: 100%;
+  height: 100%;
 }
 
 p {
@@ -113,37 +115,6 @@ h1 {
   -webkit-transform-origin: 0 25%;
 }
 
-.pages>.back-wrap>.back-shader {
-  z-index: 20;
-  position: absolute;
-  width: 0;
-  height: 50%;
-  top: 25%;
-  right: 0;
-  opacity: 1;
-  background-image: -webkit-gradient(linear, right top, left top,
-    color-stop(0, rgba(0, 0, 0, 0.025)), color-stop(50%, rgba(0, 0, 0, 0.10)),
-    color-stop(100%, transparent));
-  -webkit-transition: width 1s ease-out 0,
-    -webkit-transform 1s ease-out 0;
-    opacity 500ms ease-out 750ms;
-
-  -webkit-transform: rotate(-25deg);
-  -webkit-transform-origin: 100% 0;
-}
-
-.pages>.back-wrap.reverse-transition>.back-shader {
-  -webkit-transition: width 1s ease-out 0,
-    -webkit-transform 1s ease-out 0,
-    opacity 0 ease-out 0;
-}
-
-.pages>.back-wrap.turned>.back-shader {
-  width: 85%;
-  -webkit-transform: rotate(0);
-  opacity: 0;
-}
-
 .pages>.back-wrap>.back {
   z-index: 10;
   width: 100%;
@@ -153,9 +124,10 @@ h1 {
   background-color: white;
   position: absolute;
   opacity: 1;
-  box-shadow: -3px 0 50px rgba(0,0,0,0.5);
+  box-shadow: 0 0 0 rgba(0,0,0,0.5);
   -webkit-transition: -webkit-transform 1s ease-out 0,
-    opacity 500ms ease-out 750ms;
+    opacity 500ms ease-out 750ms,
+    box-shadow 100ms ease-out 0;
 
   -webkit-transform: rotate(-25deg) translate(100%, 0);
   -webkit-transform-origin: 100% 0;
@@ -163,58 +135,56 @@ h1 {
 
 .pages>.back-wrap.reverse-transition>.back {
   -webkit-transition: -webkit-transform 1s ease-out 0,
-    opacity 0 ease-out 0;
+    opacity 0 ease-out 0,
+    box-shadow 0 ease-out 0;
   -webkit-transition-delay: 0, 0;
 }
 
 .pages>.back-wrap.turned>.back {
   -webkit-transform: rotate(0) translate(0, 0);
   opacity: 0;
+  box-shadow: -3px 0 50px rgba(0,0,0,0.5);
 }
 
 .pages>.fold-wrap {
   position: absolute;
-  width: 100%;
-  height: 200%;
+  overflow: hidden;
+  width: 200%;
+  height: 100%;
   right: 0;
-  top: -50%;
-  overflow: visible;
-
-  -webkit-transform-origin: 100% 25%;
-  -webkit-transform: rotate(-25deg) translate(0, 0);
-  -webkit-transition: -webkit-transform 1s ease-out 0,
-    -webkit-transform-origin 1s ease-out 0;
-}
-
-.pages>.fold-wrap.turned {
-  -webkit-transform: rotate(0) translate(-100%, 0);
-  -webkit-transform-origin: 0 25%;
+  top: 0;
 }
 
 .pages>.fold-wrap>.fold-shader {
   width: 8%;
   background: -webkit-gradient(linear, left top, right top, 
     color-stop(0%, rgba(0,0,0,0)), 
-    color-stop(50%, rgba(0,0,0,0.15)),
+    color-stop(50%, rgba(0,0,0,0.2)),
     color-stop(100%, rgba(0,0,0,0)));
-  height: 100%;
-  top: 0;
+  height: 200%;
+  top: -50%;
   right: -4%;
   position: absolute;
 
-  -webkit-transition: width 1s ease-out 0, right 1s ease-out 0,
+  -webkit-transition: -webkit-transform 1s ease-out 0,
+    width 1s ease-out 0, right 1s ease-out 0,
     opacity 500ms ease-out 750ms;
+
+  -webkit-transform-origin: 100% 25%;
+  -webkit-transform: rotate(-25deg) translate(0, 0);
 }
 
 .pages>.fold-wrap.reverse-transition>.fold-shader {
-  -webkit-transition: width 1s ease-out 0, right 1s ease-out 0,
+  -webkit-transition: -webkit-transform 1s ease-out 0,
+    width 1s ease-out 0, right 1s ease-out 0,
     opacity 0 ease-out 0;
 }
 
 .pages>.fold-wrap.turned>.fold-shader {
+  width: 16%;
+  right: 42%;
   opacity: 0;
-  width: 32%;
-  right: -16%;
+  -webkit-transform: rotate(0);
 }
 
 .btn {
@@ -253,7 +223,7 @@ var PageFlipper = function(pages) {
     var r = $('<div />').addClass('back-wrap')
       .addClass(turned ? 'reverse-transition' : '')
       .addClass(turned ? 'turned' : '')
-      .html('<div class="back-shader"></div><div class="back"></div>');
+      .html('<div class="back"></div>');
     return r;
   };
 
@@ -283,7 +253,7 @@ var PageFlipper = function(pages) {
 
   //  Add the white back page and fold shading on top of all other back pages
   this.AddBackPageTop = function(back, fold) {
-    var backPage = this.pages.find('.back-wrap').first();
+    var backPage = this.pages.find('.fold-wrap').first();
     if (backPage.length) {
       backPage.before(fold).before(back);
     }
@@ -293,16 +263,18 @@ var PageFlipper = function(pages) {
   };
 
   //  Add the animated back page under all animated back pages
-  this.AddBackPageBottom = function(el) {
-    this.pages.append(el);
+  this.AddBackPageBottom = function(back, fold) {
+    this.pages.append(back).append(fold);
   };
 
   //  Remove element from DOM and unbind
   this.RemoveElement = function(e) {
     var el = $(e.target);
-    if ((el.hasClass('back-wrap') || el.hasClass('fold-wrap')) && el.parent().length) {
+    if (el.hasClass('back-wrap')) {
       el.remove();
-      el.unbind("webkitTransitionEnd");
+    }
+    else if (el.parent().hasClass('fold-wrap')) {
+      el.parent().remove();
     }
   };
 
@@ -334,8 +306,7 @@ var PageFlipper = function(pages) {
       self = this;
     
     if (el.get(0) && !this.IsLastPage(el)) {
-      this.AddBackPageBottom(back);
-      this.AddBackPageBottom(fold);
+      this.AddBackPageBottom(back, fold);
 
       setTimeout(function() {
         el.addClass('turned');
