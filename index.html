@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 <style type="text/css">
 @font-face {
   src: url('fonts/Classica.ttf');
@@ -8,27 +9,42 @@
 }
 
 html, body {
-  background-color: #888;
+  background: -webkit-gradient(linear, left top, right bottom, from(#CCC), to(#FFF));
   font-family: sans-serif;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+p {
+  font-family: Georgia;
+  text-indent: 20px;
+}
+
+h1 {
+  font-family: Classica;
+  color: #006;
+  border-bottom: 1px dashed #000;
 }
 
 #container {
-  overflow: visible;
-  position: absolute;
-  width: 100%;
-  height: 700px;
+  overflow: hidden;
+  height: 635px;
   left: 0;
   top: 0;
+  padding: 20px;
 }
 
 #container>.pages {
   width: 400px;
-  height: 600px;
+  height: 550px;
   position: relative;
   overflow: visible;
   margin: 0 auto;
   border-radius: 3px;
   box-shadow: 0 0 50px rgba(0,0,0,0.65);
+  border: 10px solid #333;
 }
 
 .pages>.page-wrap {
@@ -51,7 +67,8 @@ html, body {
 }
 
 .pages>.page-wrap>.page {
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#fff), color-stop(20%, #ddf), color-stop(70%, #fff));
+  background: -webkit-gradient(linear, left top, right top,
+    color-stop(0, #CCC), color-stop(10%, #FFF));
   position: absolute;
   right: 0;
   top: 25%;
@@ -72,10 +89,11 @@ html, body {
 .pages>.page-wrap>.page>.page-contentwrap {
   left: 0;
   top: 0;
-  padding: 20px;
+  padding: 5% 10%;
   position: absolute;
-  height: 100%;
+  height: 90%;
   overflow: scroll;
+  overflow-x: hidden;
 }
 
 .pages>.back-wrap {
@@ -97,37 +115,6 @@ html, body {
   -webkit-transform-origin: 0 25%;
 }
 
-.pages>.back-wrap>.back-shader {
-  z-index: 20;
-  position: absolute;
-  width: 0;
-  height: 50%;
-  top: 25%;
-  right: 0;
-  opacity: 1;
-  background-image: -webkit-gradient(linear, right top, left top,
-    color-stop(0, rgba(0, 0, 0, 0.025)), color-stop(50%, rgba(0, 0, 0, 0.10)),
-    color-stop(100%, transparent));
-  -webkit-transition: width 1s ease-out 0,
-    -webkit-transform 1s ease-out 0;
-    opacity 500ms ease-out 750ms;
-
-  -webkit-transform: rotate(-25deg);
-  -webkit-transform-origin: 100% 0;
-}
-
-.pages>.back-wrap.reverse-transition>.back-shader {
-  -webkit-transition: width 1s ease-out 0,
-    -webkit-transform 1s ease-out 0,
-    opacity 0 ease-out 0;
-}
-
-.pages>.back-wrap.turned>.back-shader {
-  width: 85%;
-  -webkit-transform: rotate(0);
-  opacity: 0;
-}
-
 .pages>.back-wrap>.back {
   z-index: 10;
   width: 100%;
@@ -137,9 +124,10 @@ html, body {
   background-color: white;
   position: absolute;
   opacity: 1;
-  box-shadow: -3px 0 50px rgba(0,0,0,0.5);
+  box-shadow: 0 0 0 rgba(0,0,0,0.5);
   -webkit-transition: -webkit-transform 1s ease-out 0,
-    opacity 500ms ease-out 750ms;
+    opacity 500ms ease-out 750ms,
+    box-shadow 100ms ease-out 0;
 
   -webkit-transform: rotate(-25deg) translate(100%, 0);
   -webkit-transform-origin: 100% 0;
@@ -147,58 +135,56 @@ html, body {
 
 .pages>.back-wrap.reverse-transition>.back {
   -webkit-transition: -webkit-transform 1s ease-out 0,
-    opacity 0 ease-out 0;
+    opacity 0 ease-out 0,
+    box-shadow 0 ease-out 0;
   -webkit-transition-delay: 0, 0;
 }
 
 .pages>.back-wrap.turned>.back {
   -webkit-transform: rotate(0) translate(0, 0);
   opacity: 0;
+  box-shadow: -3px 0 50px rgba(0,0,0,0.5);
 }
 
 .pages>.fold-wrap {
   position: absolute;
-  width: 100%;
-  height: 200%;
+  overflow: hidden;
+  width: 200%;
+  height: 100%;
   right: 0;
-  top: -50%;
-  overflow: visible;
-
-  -webkit-transform-origin: 100% 25%;
-  -webkit-transform: rotate(-25deg) translate(0, 0);
-  -webkit-transition: -webkit-transform 1s ease-out 0,
-    -webkit-transform-origin 1s ease-out 0;
-}
-
-.pages>.fold-wrap.turned {
-  -webkit-transform: rotate(0) translate(-100%, 0);
-  -webkit-transform-origin: 0 25%;
+  top: 0;
 }
 
 .pages>.fold-wrap>.fold-shader {
   width: 8%;
   background: -webkit-gradient(linear, left top, right top, 
     color-stop(0%, rgba(0,0,0,0)), 
-    color-stop(50%, rgba(0,0,0,0.15)),
+    color-stop(50%, rgba(0,0,0,0.2)),
     color-stop(100%, rgba(0,0,0,0)));
-  height: 100%;
-  top: 0;
+  height: 200%;
+  top: -50%;
   right: -4%;
   position: absolute;
 
-  -webkit-transition: width 1s ease-out 0, right 1s ease-out 0,
+  -webkit-transition: -webkit-transform 1s ease-out 0,
+    width 1s ease-out 0, right 1s ease-out 0,
     opacity 500ms ease-out 750ms;
+
+  -webkit-transform-origin: 100% 25%;
+  -webkit-transform: rotate(-25deg) translate(0, 0);
 }
 
 .pages>.fold-wrap.reverse-transition>.fold-shader {
-  -webkit-transition: width 1s ease-out 0, right 1s ease-out 0,
+  -webkit-transition: -webkit-transform 1s ease-out 0,
+    width 1s ease-out 0, right 1s ease-out 0,
     opacity 0 ease-out 0;
 }
 
 .pages>.fold-wrap.turned>.fold-shader {
+  width: 16%;
+  right: 42%;
   opacity: 0;
-  width: 32%;
-  right: -16%;
+  -webkit-transform: rotate(0);
 }
 
 .btn {
@@ -224,9 +210,6 @@ html, body {
   left: 30px;
 }
 
-#page1 { background: #DDF; }
-#page3 { background: #DFD; }
-#page4 { background: #FDD; }
 </style>
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 <script>
@@ -240,7 +223,7 @@ var PageFlipper = function(pages) {
     var r = $('<div />').addClass('back-wrap')
       .addClass(turned ? 'reverse-transition' : '')
       .addClass(turned ? 'turned' : '')
-      .html('<div class="back-shader"></div><div class="back"></div>');
+      .html('<div class="back"></div>');
     return r;
   };
 
@@ -270,7 +253,7 @@ var PageFlipper = function(pages) {
 
   //  Add the white back page and fold shading on top of all other back pages
   this.AddBackPageTop = function(back, fold) {
-    var backPage = this.pages.find('.back-wrap').first();
+    var backPage = this.pages.find('.fold-wrap').first();
     if (backPage.length) {
       backPage.before(fold).before(back);
     }
@@ -280,16 +263,18 @@ var PageFlipper = function(pages) {
   };
 
   //  Add the animated back page under all animated back pages
-  this.AddBackPageBottom = function(el) {
-    this.pages.append(el);
+  this.AddBackPageBottom = function(back, fold) {
+    this.pages.append(back).append(fold);
   };
 
   //  Remove element from DOM and unbind
   this.RemoveElement = function(e) {
     var el = $(e.target);
-    if ((el.hasClass('back-wrap') || el.hasClass('fold-wrap')) && el.parent().length) {
+    if (el.hasClass('back-wrap')) {
       el.remove();
-      el.unbind("webkitTransitionEnd");
+    }
+    else if (el.parent().hasClass('fold-wrap')) {
+      el.parent().remove();
     }
   };
 
@@ -321,8 +306,7 @@ var PageFlipper = function(pages) {
       self = this;
     
     if (el.get(0) && !this.IsLastPage(el)) {
-      this.AddBackPageBottom(back);
-      this.AddBackPageBottom(fold);
+      this.AddBackPageBottom(back, fold);
 
       setTimeout(function() {
         el.addClass('turned');
@@ -363,9 +347,8 @@ $('#prev').bind('click', function() {
         <div class="page-contentwrap">
           <h1>Monster</h1>
            <img src="images/monster.jpg" style="width: 100%" /> 
-          <p>Monster Energy is an energy drink that was launched by Hansen Natural in 2002.[1]</p>          
-          <p>Monster Energy is distributed by Hansen Natural a listed company of Corona, California. Though it is not widely advertised in the media, Monster receives a large amount of recognition from its sponsorship of various sporting events, usually high risk events such as motocross or dirt biking. Hansen Natural Corporation announced a distribution agreement with Anheuser-Busch in the U.S.[2] and Grupo Jumex in Mexico.[3] Hansen Natural Corporation announced a distribution deal with PepsiCo Canada in February of 2007. Contracts with existing distributors were bought out in these markets. In Germany Pepsi is the Producer and it is available there since summer/fall 2010. It is distributed in Australia by Schweppes as Coca-Cola Amatil manufactures Mother energy drink, which is an exclusive energy drink sold only in Australia and New Zealand.
-          </p>
+          <p><b>Monster Energy</b> is an <a href="/wiki/Energy_drink" title="Energy drink">energy drink</a> that was launched by <a href="/wiki/Hansen_Natural" title="Hansen Natural">Hansen Natural</a> in 2002.<sup id="cite_ref-0" class="reference"><a href="#cite_note-0"><span>[</span>1<span>]</span></a></sup></p>          
+          <p>Though it is not widely advertised in the media, Monster receives a large amount of recognition from its sponsorship of various sporting events, including motocross and car racing. Hansen Natural Corporation announced a distribution agreement with <a href="/wiki/Anheuser-Busch" title="Anheuser-Busch">Anheuser-Busch</a> in the <a href="/wiki/United_States" title="United States">U.S.</a><sup id="cite_ref-1" class="reference"><a href="#cite_note-1"><span>[</span>2<span>]</span></a></sup> and Grupo Jumex in <a href="/wiki/Mexico" title="Mexico">Mexico</a>.<sup id="cite_ref-2" class="reference"><a href="#cite_note-2"><span>[</span>3<span>]</span></a></sup> Hansen Natural Corporation announced a distribution deal with PepsiCo Canada in February of 2007. Contracts with existing distributors were bought out in these markets. In Germany <a href="/wiki/Pepsi" title="Pepsi">Pepsi</a> is the Producer and it is available there since summer/fall 2010. It is distributed in Australia by <a href="/wiki/Schweppes" title="Schweppes">Schweppes</a> as <a href="/wiki/Coca-Cola_Amatil" title="Coca-Cola Amatil">Coca-Cola Amatil</a>, which manufactures <a href="/wiki/Mother_(energy_drink)" title="Mother (energy drink)">Mother</a> energy drink, an exclusive energy drink sold only in Australia and New Zealand.</p>
         </div>
       </div>
     </div>
@@ -374,8 +357,7 @@ $('#prev').bind('click', function() {
       <div id="page4" class="page">
         <div class="page-contentwrap">
           <h1>Starbucks!</h1>
-            <p>Starbucks Corporation (NASDAQ: SBUX) is an international coffee and coffeehouse chain based in Seattle, Washington. Starbucks is the largest coffeehouse company in the world,[2] with 17,009 stores in 55 countries, including over 11,000 in the United States, over 1,000 in Canada, over 700 in the United Kingdom, and over 150 in Turkey.[1][3]</p>
-            <p>Starbucks sells drip brewed coffee, espresso-based hot drinks, other hot and cold drinks, coffee beans, salads, hot and cold sandwiches and panini, pastries, snacks, and items such as mugs and tumblers. Through the Starbucks Entertainment division and Hear Music brand, the company also markets books, music, and film. Many of the company's products are seasonal or specific to the locality of the store. Starbucks-brand ice cream and coffee are also offered at grocery stores.</p>
+            <p><b>Starbucks Corporation</b> (<a href="/wiki/NASDAQ" title="NASDAQ">NASDAQ</a>:&nbsp;<a rel="nofollow" class="external text" href="http://quotes.nasdaq.com/asp/SummaryQuote.asp?symbol=SBUX&amp;selected=SBUX">SBUX</a>) is an international coffee and <a href="/wiki/List_of_coffeehouse_chains" title="List of coffeehouse chains">coffeehouse chain</a> based in <a href="/wiki/Seattle" title="Seattle">Seattle</a>, Washington. Starbucks is the largest <a href="/wiki/Coffeehouse" title="Coffeehouse">coffeehouse</a> company in the world,<sup id="cite_ref-hoovers_1-1" class="reference"><a href="#cite_note-hoovers-1"><span>[</span>2<span>]</span></a></sup> with 17,009 stores in 55 countries, including over 11,000 in the United States, over 1,000 in Canada, over 700 in the United Kingdom, and over 150 in <a href="/wiki/Turkey" title="Turkey">Turkey</a>.<sup id="cite_ref-10K2010_0-6" class="reference"><a href="#cite_note-10K2010-0"><span>[</span>1<span>]</span></a></sup><sup id="cite_ref-factsheet_2-0" class="reference"><a href="#cite_note-factsheet-2"><span>[</span>3<span>]</span></a></sup></p>
             <img src="images/coffee.jpg" />
         </div>
       </div>
@@ -386,7 +368,7 @@ $('#prev').bind('click', function() {
         <div class="page-contentwrap">
           <h1>Red Bull</h1>
           <img src="images/redbull.jpg" />
-          <p>Red Bull is an energy drink sold by the Austrian Red Bull GmbH, created in 1987 by the Austrian entrepreneur Dietrich Mateschitz[1]. In terms of market share, Red Bull is the most popular energy drink in the world, with 3 billion cans sold each year.[2][3] Dietrich Mateschitz was inspired by an already existing drink called Krating Daeng which he discovered in Thailand. He took this idea, and to suit the tastes of Westerners, modified the ingredients,[4] and founded Austrian Red Bull GmbH in partnership with Chaleo Yoovidhya. Chaleo Yoovidhya invented the Thai energy drink Krating Daeng; in Thai daeng is red, and krating is the reddish brown bovine, gaur, an animal slightly larger than the bison. Red Bull is sold in a tall and slim blue-silver can. Krating Daeng is sold in Thailand and in some parts of Asia in a wider gold can with the name of Krating Daeng or Red Bull Classic.[5] Both are different products produced separately.</p>
+          <p><b>Red Bull</b> is an <a href="/wiki/Energy_drink" title="Energy drink">energy drink</a> sold by the <a href="/wiki/Austria" title="Austria">Austrian</a> <a href="/wiki/Red_Bull_GmbH" title="Red Bull GmbH">Red Bull GmbH</a>, created in 1987 by the Austrian entrepreneur Dietrich Mateschitz<sup id="cite_ref-0" class="reference"><a href="#cite_note-0"><span>[</span>1<span>]</span></a></sup>. In terms of market share, Red Bull is the most popular energy drink in the world, with 3 billion cans sold each year.<sup id="cite_ref-1" class="reference"><a href="#cite_note-1"><span>[</span>2<span>]</span></a></sup><sup id="cite_ref-2" class="reference"><a href="#cite_note-2"><span>[</span>3<span>]</span></a></sup> <a href="/wiki/Dietrich_Mateschitz" title="Dietrich Mateschitz">Dietrich Mateschitz</a> was inspired by an already existing drink called <a href="/wiki/Krating_Daeng" title="Krating Daeng">Krating Daeng</a> which he discovered in Thailand. He took this idea, and to suit the tastes of Westerners, modified the ingredients,<sup id="cite_ref-3" class="reference"><a href="#cite_note-3"><span>[</span>4<span>]</span></a></sup> and founded <a href="/wiki/Austria" title="Austria">Austrian</a> <a href="/wiki/Red_Bull_GmbH" title="Red Bull GmbH">Red Bull GmbH</a> in partnership with <a href="/wiki/Chaleo_Yoovidhya" title="Chaleo Yoovidhya">Chaleo Yoovidhya</a>. <a href="/wiki/Chaleo_Yoovidhya" title="Chaleo Yoovidhya">Chaleo Yoovidhya</a> invented the <a href="/wiki/Thailand" title="Thailand">Thai</a> energy drink <a href="/wiki/Krating_Daeng" title="Krating Daeng">Krating Daeng</a>; in <a href="/wiki/Thai_language" title="Thai language">Thai</a> <i>daeng</i> is red, and <i>krating</i> is the reddish brown <a href="/wiki/Bovine" title="Bovine" class="mw-redirect">bovine</a>, <a href="/wiki/Gaur" title="Gaur">gaur</a>, an animal slightly larger than the <a href="/wiki/Bison" title="Bison">bison</a>. Red Bull is sold in a tall and slim blue-silver can. <a href="/wiki/Krating_Daeng" title="Krating Daeng">Krating Daeng</a> is sold in <a href="/wiki/Thailand" title="Thailand">Thailand</a> and in some parts of <a href="/wiki/Asia" title="Asia">Asia</a> in a wider gold can with the name of <a href="/wiki/Krating_Daeng" title="Krating Daeng">Krating Daeng</a> or Red Bull Classic.<sup id="cite_ref-4" class="reference"><a href="#cite_note-4"><span>[</span>5<span>]</span></a></sup> Both are different products produced separately.</p>
         </div>
       </div>
     </div>
@@ -396,7 +378,7 @@ $('#prev').bind('click', function() {
         <div class="page-contentwrap">
           <h1>Caffeine</h1>
           <img src="images/caffeine.svg" style="width: 80%" />
-          <p>Caffeine is a bitter, white crystalline xanthine alkaloid that acts as a stimulant drug. Caffeine is found in varying quantities in the seeds, leaves, and fruit of some plants, where it acts as a natural pesticide that paralyzes and kills certain insects feeding on the plants. It is most commonly consumed by humans in infusions extracted from the bean of the coffee plant and the leaves of the tea bush, as well as from various foods and drinks containing products derived from the kola nut. Other sources include yerba maté, guarana berries, guayusa, and the yaupon holly.</p>
+          <p><b>Caffeine</b> is a bitter, white <a href="/wiki/Crystalline" title="Crystalline" class="mw-redirect">crystalline</a> <a href="/wiki/Xanthine" title="Xanthine">xanthine</a> <a href="/wiki/Alkaloid" title="Alkaloid">alkaloid</a> that acts as a <a href="/wiki/Stimulant" title="Stimulant">stimulant</a> drug. Caffeine is found in varying quantities in the seeds, leaves, and fruit of some plants, where it acts as a natural pesticide that paralyzes and kills certain insects feeding on the plants. It is most commonly consumed by humans in infusions extracted from the bean of the <a href="/wiki/Coffea_arabica" title="Coffea arabica">coffee plant</a> and the leaves of the <a href="/wiki/Camellia_sinensis" title="Camellia sinensis">tea bush</a>, as well as from various foods and drinks containing products derived from the <a href="/wiki/Kola_nut" title="Kola nut">kola nut</a>. Other sources include <a href="/wiki/Yerba_mat%C3%A9" title="Yerba maté">yerba maté</a>, <a href="/wiki/Guarana" title="Guarana">guarana</a> berries, <a href="/wiki/Ilex_guayusa" title="Ilex guayusa">guayusa</a>, and the <a href="/wiki/Ilex_vomitoria" title="Ilex vomitoria">yaupon holly</a>.</p>
         </div>
       </div>
     </div>
@@ -404,8 +386,8 @@ $('#prev').bind('click', function() {
     <div class="page-wrap">
       <div id="page1" class="page">
         <div class="page-contentwrap">
-          <h1>All Kinds of Caffeine!</h1>
-          <img src="images/me.jpg" />
+          <h1>Ways to Get Caffeine</h1>
+          <img src="images/me.jpg" style="width: 100%" />
         </div>
       </div>
     </div>
