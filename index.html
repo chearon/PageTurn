@@ -124,10 +124,10 @@ h1 {
   background-color: white;
   position: absolute;
   opacity: 1;
-  box-shadow: 0 0 0 rgba(0,0,0,0.5);
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
   -webkit-transition: -webkit-transform 1s ease-out 0,
     opacity 500ms ease-out 750ms,
-    box-shadow 100ms ease-out 0;
+    box-shadow 800ms ease-out 0;
 
   -webkit-transform: rotate(-25deg) translate(100%, 0);
   -webkit-transform-origin: 100% 0;
@@ -136,15 +136,13 @@ h1 {
 .pages>.back-wrap.reverse-transition>.back {
   -webkit-transition: -webkit-transform 1s ease-out 0,
     opacity 0 ease-out 0,
-    box-shadow 0 ease-out 0;
-  -webkit-transition-delay: 0, 0;
-  box-shadow: -3px 0 50px rgba(0,0,0,0.5);
+    box-shadow 800ms ease-out 200ms;
 }
 
 .pages>.back-wrap.turned>.back {
   -webkit-transform: rotate(0) translate(0, 0);
   opacity: 0;
-  box-shadow: -3px 0 50px rgba(0,0,0,0.5);
+  box-shadow: 0 0 50px rgba(0,0,0,0.5);
 }
 
 .pages>.fold-wrap {
@@ -157,14 +155,14 @@ h1 {
 }
 
 .pages>.fold-wrap>.fold-shader {
-  width: 8%;
-  background: -webkit-gradient(linear, left top, right top, 
-    color-stop(0%, rgba(0,0,0,0)), 
-    color-stop(50%, rgba(0,0,0,0.2)),
-    color-stop(100%, rgba(0,0,0,0)));
+  width: 4%;
+  right: -2%;
   height: 200%;
   top: -50%;
-  right: -4%;
+  background: -webkit-gradient(linear, left top, right top, 
+    color-stop(0%, rgba(0,0,0,0)), 
+    color-stop(50%, rgba(0,0,0,0.3)),
+    color-stop(100%, rgba(0,0,0,0)));
   position: absolute;
 
   -webkit-transition: -webkit-transform 1s ease-out 0,
@@ -189,14 +187,15 @@ h1 {
 }
 
 .btn {
-  position: fixed;
-  bottom: 30px;
+  position: relative;
+  display: inline;
   width: auto;
   height: auto;
   background-color: #026;
   color: #FFF;
   font-family: Classica;
   font-size: 1.3em;
+  margin: 10px;
   padding: 10px;
   cursor: pointer;
   border-radius: 15px;
@@ -204,11 +203,9 @@ h1 {
 }
 
 #next {
-  right: 30px;
 }
 
 #prev {
-  left: 30px;
 }
 
 </style>
@@ -295,7 +292,9 @@ var PageFlipper = function(pages) {
         back.removeClass('turned').bind("webkitTransitionEnd", self.RemoveElement);
         fold.removeClass('turned').bind("webkitTransitionEnd", self.RemoveElement);
       }, 0);
+      return true;
     }
+    return false;
   };
 
   //  Animate a page turn forward
@@ -314,7 +313,9 @@ var PageFlipper = function(pages) {
         back.addClass('turned').bind("webkitTransitionEnd", self.RemoveElement);
         fold.addClass('turned').bind("webkitTransitionEnd", self.RemoveElement);
       }, 0);
+      return true;
     }
+    return false;
   };
 };
 
@@ -322,6 +323,24 @@ var flipper = new PageFlipper($('.pages'));
 
 $('#next').bind('click', function() {
   flipper.NextPage();
+});
+
+$('#flipback').bind('click', function() {
+  var ms = 60;
+  setTimeout(function keepflippin() {
+    if (flipper.NextPage()) {
+      setTimeout(keepflippin, ms);
+    }
+  }, ms);
+});
+
+$('#flipfront').bind('click', function() {
+  var ms = 60;
+  setTimeout(function keepflippin() {
+    if (flipper.PreviousPage()) {
+      setTimeout(keepflippin, ms);
+    }
+  }, ms);
 });
 
 $('#prev').bind('click', function() {
@@ -398,6 +417,12 @@ $('#prev').bind('click', function() {
 </div>
 <div id="prev" class="btn">
   Previous Page
+</div>
+<div id="flipfront" class="btn">
+  Flip to front
+</div>
+<div id="flipback" class="btn">
+  Flip to back
 </div>
 <div id="next" class="btn">
   Next Page
