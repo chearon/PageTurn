@@ -268,18 +268,14 @@ var PageFlipper = function(pages) {
     return el.prev().length === 0;
   };
 
-  //  Add the element for the animated back page on top of all other back pages
-  this.AddBackPageTop = function(el) {
-    var backPage = this.pages.find('.back-wrap'),
-      shader = this.pages.find('.fold-wrap');
+  //  Add the white back page and fold shading on top of all other back pages
+  this.AddBackPageTop = function(back, fold) {
+    var backPage = this.pages.find('.back-wrap').first();
     if (backPage.length) {
-      backPage.before(el);
-    }
-    else if (shader.length) {
-      shader.before(el);
+      backPage.before(fold).before(back);
     }
     else {
-      this.pages.append(el);
+      this.pages.append(back).append(fold);
     }
   };
 
@@ -306,8 +302,7 @@ var PageFlipper = function(pages) {
       self = this;
 
     if (el.get(0)) {
-      this.AddBackPageTop(back);
-      this.AddBackPageTop(fold);
+      this.AddBackPageTop(back, fold);
       
       setTimeout(function() {
         el.removeClass('turned');
