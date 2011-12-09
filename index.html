@@ -50,9 +50,9 @@ h1 {
 .pages>.page-wrap {
   position: absolute;
   width: 200%;
-  height: 200%;
+  height: 1000%;
   right: 0;
-  top: -50%;
+  top: -250%;
   overflow: hidden;
   
   -webkit-transform: rotate(-25deg) translate(0, 0);
@@ -73,7 +73,7 @@ h1 {
   right: 0;
   top: 25%;
   width: 50%;
-  height: 50%;
+  height: 10%;
   overflow: hidden;
   
   -webkit-transform: rotate(25deg) translate(0, 0);
@@ -91,7 +91,7 @@ h1 {
   top: 0;
   padding: 5% 10%;
   position: absolute;
-  height: 90%;
+  height: 100%;
   overflow: scroll;
   overflow-x: hidden;
 }
@@ -148,8 +148,9 @@ h1 {
 .pages>.fold-wrap {
   position: absolute;
   overflow: hidden;
+  overflow-y: visible;
   width: 200%;
-  height: 100%;
+  height: 200%;
   right: 0;
   top: 0;
 }
@@ -157,8 +158,8 @@ h1 {
 .pages>.fold-wrap>.fold-shader {
   width: 4%;
   right: -2%;
-  height: 200%;
-  top: -50%;
+  height: 50%;
+  top: 0;
   background: -webkit-gradient(linear, left top, right top, 
     color-stop(0%, rgba(0,0,0,0)), 
     color-stop(50%, rgba(0,0,0,0.3)),
@@ -166,17 +167,15 @@ h1 {
   position: absolute;
 
   -webkit-transition: -webkit-transform 1s ease-out 0,
-    width 1s ease-out 0, right 1s ease-out 0,
-    opacity 500ms ease-out 750ms;
+    width 1s ease-out 0, opacity 500ms ease-out 750ms, right 1s ease-out 0;
 
-  -webkit-transform-origin: 100% 25%;
-  -webkit-transform: rotate(-25deg) translate(0, 0);
+  -webkit-transform-origin: 50% 0;
+  -webkit-transform: rotate(-25deg);
 }
 
 .pages>.fold-wrap.reverse-transition>.fold-shader {
   -webkit-transition: -webkit-transform 1s ease-out 0,
-    width 1s ease-out 0, right 1s ease-out 0,
-    opacity 0 ease-out 0;
+    width 1s ease-out 0, opacity 0 ease-out 0, right 1s ease-out 0;
 }
 
 .pages>.fold-wrap.turned>.fold-shader {
