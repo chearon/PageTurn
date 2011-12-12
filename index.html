@@ -156,7 +156,7 @@ h1 {
 
 .pages>.fold-wrap>.fold-shader {
   width: 4%;
-  right: -2%;
+  right: 0;
   height: 50%;
   top: 0;
   background: -webkit-gradient(linear, left top, right top, 
@@ -166,22 +166,20 @@ h1 {
   position: absolute;
 
   -webkit-transition: -webkit-transform 1s ease-out 0,
-    width 1s ease-out 0, opacity 500ms ease-out 750ms, right 1s ease-out 0;
+    opacity 500ms ease-out 750ms;
 
   -webkit-transform-origin: 50% 0;
-  -webkit-transform: rotate(-25deg);
+  -webkit-transform: rotate(-25deg) scaleX(1) translate3d(50%,0,0);
 }
 
 .pages>.fold-wrap.reverse-transition>.fold-shader {
   -webkit-transition: -webkit-transform 1s ease-out 0,
-    width 1s ease-out 0, opacity 0 ease-out 0, right 1s ease-out 0;
+    opacity 0 ease-out 0;
 }
 
 .pages>.fold-wrap.turned>.fold-shader {
-  width: 16%;
-  right: 42%;
   opacity: 0;
-  -webkit-transform: rotate(0);
+  -webkit-transform: rotate(0) translate3d(-1200%,0,0) scaleX(4);
 }
 
 .btn {
@@ -268,10 +266,10 @@ var PageFlipper = function(pages) {
   this.RemoveElement = function(e) {
     var el = $(e.target);
     if (el.hasClass('back-wrap')) {
-      el.remove();
+      //el.remove();
     }
     else if (el.parent().hasClass('fold-wrap')) {
-      el.parent().remove();
+      //el.parent().remove();
     }
   };
 
