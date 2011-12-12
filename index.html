@@ -276,46 +276,54 @@ var PageFlipper = function(pages) {
   };
 
   //  Animate page turn to back one page
-  this.PreviousPage = function() {
-    var el = this.GetTopPageLeft(),
-      back = this.MakeBackPage(true),
-      fold = this.MakeFold(true),
-      pages = this.pages,
+  this.PreviousPage = function(delay) {
+    var pages = this.pages,
       self = this;
-
-    if (el.get(0)) {
-      this.AddBackPageTop(back, fold);
-      
-      setTimeout(function() {
-        el.removeClass('turned');
-        back.removeClass('turned').bind("webkitTransitionEnd", self.RemoveElement);
-        fold.removeClass('turned').bind("webkitTransitionEnd", self.RemoveElement);
-      }, 0);
-      return true;
-    }
-    return false;
+    delay = delay || 0;
+    
+    setTimeout(function() {
+      var el = self.GetTopPageLeft(),
+        back = self.MakeBackPage(true),
+        fold = self.MakeFold(true);
+      if (el.get(0)) {
+        self.AddBackPageTop(back, fold);
+        
+        setTimeout(function() {
+          el.removeClass('turned');
+          back.removeClass('turned')
+            .bind("webkitTransitionEnd", self.RemoveElement);
+          fold.removeClass('turned')
+            .bind("webkitTransitionEnd", self.RemoveElement);
+        }, 0);
+        return true;
+      }
+    }, delay);
   };
 
   //  Animate a page turn forward
-  this.NextPage = function() {
-    var el = this.GetTopPageRight(),
-      back = this.MakeBackPage(false),
-      fold = this.MakeFold(false),
-      pages = this.pages,
+  this.NextPage = function(delay) {
+    var pages = this.pages,
       self = this;
-    
-    if (el.get(0) && !this.IsLastPage(el)) {
-      this.AddBackPageBottom(back, fold);
-
+    delay = delay || 0;
+   
       setTimeout(function() {
-        el.addClass('turned');
-        back.addClass('turned').bind("webkitTransitionEnd", self.RemoveElement);
-        fold.addClass('turned').bind("webkitTransitionEnd", self.RemoveElement);
-      }, 0);
-      return true;
-    }
-    return false;
+        var el = self.GetTopPageRight(),
+          back = self.MakeBackPage(false),
+          fold = self.MakeFold(false);
+
+        if (el.get(0) && !self.IsLastPage(el)) {
+          self.AddBackPageBottom(back, fold);
+          setTimeout(function() {
+            el.addClass('turned');
+            back.addClass('turned')
+              .bind("webkitTransitionEnd", self.RemoveElement);
+            fold.addClass('turned')
+              .bind("webkitTransitionEnd", self.RemoveElement);
+          }, 0);
+        }
+      }, delay);
   };
+
 };
 
 var flipper = new PageFlipper($('.pages'));
@@ -325,21 +333,13 @@ $('#next').bind('click', function() {
 });
 
 $('#flipback').bind('click', function() {
-  var ms = 60;
-  setTimeout(function keepflippin() {
-    if (flipper.NextPage()) {
-      setTimeout(keepflippin, ms);
-    }
-  }, ms);
+  var i = flipper.pages.children().length - $('.turned').length;
+  while (i--) flipper.NextPage(i*100);
 });
 
 $('#flipfront').bind('click', function() {
-  var ms = 60;
-  setTimeout(function keepflippin() {
-    if (flipper.PreviousPage()) {
-      setTimeout(keepflippin, ms);
-    }
-  }, ms);
+  var i = $('.turned').length;
+  while (i--) flipper.PreviousPage(i*100);
 });
 
 $('#prev').bind('click', function() {
