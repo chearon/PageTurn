@@ -125,8 +125,7 @@ h1 {
   opacity: 1;
   box-shadow: 0 0 10px rgba(0,0,0,0.5);
   -webkit-transition: -webkit-transform 1s ease-out 0,
-    opacity 500ms ease-out 750ms,
-    box-shadow 800ms ease-out 0;
+    opacity 500ms ease-out 750ms;
 
   -webkit-transform: rotate(-25deg) translate(100%, 0);
   -webkit-transform-origin: 100% 0;
@@ -134,8 +133,7 @@ h1 {
 
 .pages>.back-wrap.reverse-transition>.back {
   -webkit-transition: -webkit-transform 1s ease-out 0,
-    opacity 0 ease-out 0,
-    box-shadow 800ms ease-out 200ms;
+    opacity 0 ease-out 0;
 }
 
 .pages>.back-wrap.turned>.back {
@@ -266,10 +264,10 @@ var PageFlipper = function(pages) {
   this.RemoveElement = function(e) {
     var el = $(e.target);
     if (el.hasClass('back-wrap')) {
-      //el.remove();
+      el.remove();
     }
     else if (el.parent().hasClass('fold-wrap')) {
-      //el.parent().remove();
+      el.parent().remove();
     }
   };
 
