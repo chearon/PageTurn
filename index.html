@@ -97,6 +97,7 @@ h1 {
 
 .pages>.back-wrap {
   position: absolute;
+  display: none;
   width: 100%;
   height: 200%;
   right: 0;
@@ -144,6 +145,7 @@ h1 {
 
 .pages>.fold-wrap {
   position: absolute;
+  display: none;
   overflow: hidden;
   overflow-y: visible;
   width: 200%;
@@ -247,7 +249,11 @@ var PageFlipper = function(pages) {
       if (thisPage.page.get(0)) {
         setTimeout(function() {
           $([thisPage.page.get(0), thisPage.back.get(0), thisPage.fold.get(0)])
-            .addClass('reverse-transition').removeClass('turned');
+            .css({display: 'block'})
+            .addClass('reverse-transition').removeClass('turned')
+            .bind("webkitTransitionEnd", function() {
+              $([thisPage.page.get(0), thisPage.back.get(0), thisPage.fold.get(0)]).css({display: 'none'});
+            });
         }, 0);
         return true;
       }
@@ -266,7 +272,11 @@ var PageFlipper = function(pages) {
       if (thisPage.page.get(0) && !self.IsLastPage(thisPage.page)) {
         setTimeout(function() {
           $([thisPage.page.get(0), thisPage.back.get(0), thisPage.fold.get(0)])
-            .removeClass('reverse-transition').addClass('turned');
+            .css({display: 'block'})
+            .removeClass('reverse-transition').addClass('turned')
+            .bind("webkitTransitionEnd", function() {
+              $([thisPage.page.get(0), thisPage.back.get(0), thisPage.fold.get(0)]).css({display:'none'});
+            });
         }, 0);
       }
     }, delay);
