@@ -306,22 +306,22 @@ var PageFlipper = function(pages) {
       self = this;
     delay = delay || 0;
    
-      setTimeout(function() {
-        var el = self.GetTopPageRight(),
-          back = self.MakeBackPage(false),
-          fold = self.MakeFold(false);
+    setTimeout(function() {
+      var el = self.GetTopPageRight(),
+        back = self.MakeBackPage(false),
+        fold = self.MakeFold(false);
 
-        if (el.get(0) && !self.IsLastPage(el)) {
-          self.AddBackPageBottom(back, fold);
-          setTimeout(function() {
-            el.addClass('turned');
-            back.addClass('turned')
-              .bind("webkitTransitionEnd", self.RemoveElement);
-            fold.addClass('turned')
-              .bind("webkitTransitionEnd", self.RemoveElement);
-          }, 0);
-        }
-      }, delay);
+      if (el.get(0) && !self.IsLastPage(el)) {
+        self.AddBackPageBottom(back, fold);
+        setTimeout(function() {
+          el.addClass('turned');
+          back.addClass('turned')
+            .bind("webkitTransitionEnd", self.RemoveElement);
+          fold.addClass('turned')
+            .bind("webkitTransitionEnd", self.RemoveElement);
+        }, 0);
+      }
+    }, delay);
   };
 
 };
