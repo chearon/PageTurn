@@ -210,65 +210,30 @@ jQuery(function($) {
 
 var PageFlipper = function(pages) {
   this.pages = pages;
-
-  //  Create a blank back page with correct CSS class according to turned
-  this.MakeBackPage = function(turned) {
-    var r = $('<div />').addClass('back-wrap')
-      .addClass(turned ? 'reverse-transition' : '')
-      .addClass(turned ? 'turned' : '')
-      .html('<div class="back"></div>');
-    return r;
-  };
-
-  //  Create shading element for edge between folded page and page below
-  this.MakeFold = function(turned) {
-    var r = $('<div />').addClass('fold-wrap')
-      .addClass(turned ? 'reverse-transition' : '')
-      .addClass(turned ? 'turned' : '')
-      .html('<div class="fold-shader"></div>');
-    return r;
-  };
-
+  
   //  Return the last .page-wrap, !.turned element (so the one that appears on top)
   this.GetTopPageRight = function() {
-    return pages.children('.page-wrap').not('.turned').last();
+    var page = this.pages.children('.page-wrap').not('.turned').last();
+    return {
+      page: page, 
+      back: page.nextAll('.back-wrap:first'),
+      fold: page.nextAll('.fold-wrap:first')
+    };
   };
 
   //  Return the last .page-wrap.turned element (the topmost on the left)
   this.GetTopPageLeft = function() {
-    return pages.children('.page-wrap.turned').first();
+    var page = this.pages.children('.page-wrap.turned').first();
+    return {
+      page: page, 
+      back: page.nextAll('.back-wrap:first'),
+      fold: page.nextAll('.fold-wrap:first')
+    };
   };
 
   //  Is this the last page?  True if it as at the top of the list
   this.IsLastPage = function(el) {
     return el.prev().length === 0;
-  };
-
-  //  Add the white back page and fold shading on top of all other back pages
-  this.AddBackPageTop = function(back, fold) {
-    var backPage = this.pages.find('.back-wrap').first();
-    if (backPage.length) {
-      backPage.before(back).before(fold);
-    }
-    else {
-      this.pages.append(back).append(fold);
-    }
-  };
-
-  //  Add the animated back page under all animated back pages
-  this.AddBackPageBottom = function(back, fold) {
-    this.pages.append(back).append(fold);
-  };
-
-  //  Remove element from DOM and unbind
-  this.RemoveElement = function(e) {
-    var el = $(e.target);
-    if (el.hasClass('back-wrap')) {
-      el.remove();
-    }
-    else if (el.parent().hasClass('fold-wrap')) {
-      el.parent().remove();
-    }
   };
 
   //  Animate page turn to back one page
@@ -278,18 +243,11 @@ var PageFlipper = function(pages) {
     delay = delay || 0;
     
     setTimeout(function() {
-      var el = self.GetTopPageLeft(),
-        back = self.MakeBackPage(true),
-        fold = self.MakeFold(true);
-      if (el.get(0)) {
-        self.AddBackPageTop(back, fold);
-        
+      var thisPage = self.GetTopPageLeft();
+      if (thisPage.page.get(0)) {
         setTimeout(function() {
-          el.removeClass('turned');
-          back.removeClass('turned')
-            .bind("webkitTransitionEnd", self.RemoveElement);
-          fold.removeClass('turned')
-            .bind("webkitTransitionEnd", self.RemoveElement);
+          $([thisPage.page.get(0), thisPage.back.get(0), thisPage.fold.get(0)])
+            .addClass('reverse-transition').removeClass('turned');
         }, 0);
         return true;
       }
@@ -303,18 +261,12 @@ var PageFlipper = function(pages) {
     delay = delay || 0;
    
     setTimeout(function() {
-      var el = self.GetTopPageRight(),
-        back = self.MakeBackPage(false),
-        fold = self.MakeFold(false);
+      var thisPage = self.GetTopPageRight();
 
-      if (el.get(0) && !self.IsLastPage(el)) {
-        self.AddBackPageBottom(back, fold);
+      if (thisPage.page.get(0) && !self.IsLastPage(thisPage.page)) {
         setTimeout(function() {
-          el.addClass('turned');
-          back.addClass('turned')
-            .bind("webkitTransitionEnd", self.RemoveElement);
-          fold.addClass('turned')
-            .bind("webkitTransitionEnd", self.RemoveElement);
+          $([thisPage.page.get(0), thisPage.back.get(0), thisPage.fold.get(0)])
+            .removeClass('reverse-transition').addClass('turned');
         }, 0);
       }
     }, delay);
@@ -356,6 +308,12 @@ $('#prev').bind('click', function() {
         </div>
       </div>
     </div>
+    <div class="back-wrap">
+      <div class="back"></div>
+    </div>
+    <div class="fold-wrap">
+      <div class="fold-shader"></div>
+    </div>
     
     <div class="page-wrap">
       <div id="page5" class="page">
@@ -367,6 +325,12 @@ $('#prev').bind('click', function() {
         </div>
       </div>
     </div>
+    <div class="back-wrap">
+      <div class="back"></div>
+    </div>
+    <div class="fold-wrap">
+      <div class="fold-shader"></div>
+    </div>
 
     <div class="page-wrap">
       <div id="page4" class="page">
@@ -376,6 +340,12 @@ $('#prev').bind('click', function() {
             <img src="images/coffee.jpg" />
         </div>
       </div>
+    </div>
+    <div class="back-wrap">
+      <div class="back"></div>
+    </div>
+    <div class="fold-wrap">
+      <div class="fold-shader"></div>
     </div>
 
     <div class="page-wrap">
@@ -387,6 +357,12 @@ $('#prev').bind('click', function() {
         </div>
       </div>
     </div>
+    <div class="back-wrap">
+      <div class="back"></div>
+    </div>
+    <div class="fold-wrap">
+      <div class="fold-shader"></div>
+    </div>
     
     <div class="page-wrap">
       <div id="page2" class="page">
@@ -397,6 +373,12 @@ $('#prev').bind('click', function() {
         </div>
       </div>
     </div>
+    <div class="back-wrap">
+      <div class="back"></div>
+    </div>
+    <div class="fold-wrap">
+      <div class="fold-shader"></div>
+    </div>
     
     <div class="page-wrap">
       <div id="page1" class="page">
@@ -406,7 +388,13 @@ $('#prev').bind('click', function() {
         </div>
       </div>
     </div>
-
+    <div class="back-wrap">
+      <div class="back"></div>
+    </div>
+    <div class="fold-wrap">
+      <div class="fold-shader"></div>
+    </div>
+    
   </div>
 
 </div>
