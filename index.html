@@ -216,8 +216,8 @@ var PageFlipper = function(pages) {
     var page = this.pages.children('.page-wrap').not('.turned').last();
     return {
       page: page, 
-      back: page.nextAll('.back-wrap:first'),
-      fold: page.nextAll('.fold-wrap:first')
+      back: this.pages.children('.back-wrap').not('.turned').first(),
+      fold: this.pages.children('.fold-wrap').not('.turned').first()
     };
   };
 
@@ -226,8 +226,8 @@ var PageFlipper = function(pages) {
     var page = this.pages.children('.page-wrap.turned').first();
     return {
       page: page, 
-      back: page.nextAll('.back-wrap:first'),
-      fold: page.nextAll('.fold-wrap:first')
+      back: this.pages.children('.back-wrap.turned').last(),
+      fold: this.pages.children('.fold-wrap.turned').last()
     };
   };
 
@@ -308,12 +308,6 @@ $('#prev').bind('click', function() {
         </div>
       </div>
     </div>
-    <div class="back-wrap">
-      <div class="back"></div>
-    </div>
-    <div class="fold-wrap">
-      <div class="fold-shader"></div>
-    </div>
     
     <div class="page-wrap">
       <div id="page5" class="page">
@@ -325,12 +319,6 @@ $('#prev').bind('click', function() {
         </div>
       </div>
     </div>
-    <div class="back-wrap">
-      <div class="back"></div>
-    </div>
-    <div class="fold-wrap">
-      <div class="fold-shader"></div>
-    </div>
 
     <div class="page-wrap">
       <div id="page4" class="page">
@@ -340,12 +328,6 @@ $('#prev').bind('click', function() {
             <img src="images/coffee.jpg" />
         </div>
       </div>
-    </div>
-    <div class="back-wrap">
-      <div class="back"></div>
-    </div>
-    <div class="fold-wrap">
-      <div class="fold-shader"></div>
     </div>
 
     <div class="page-wrap">
@@ -357,12 +339,6 @@ $('#prev').bind('click', function() {
         </div>
       </div>
     </div>
-    <div class="back-wrap">
-      <div class="back"></div>
-    </div>
-    <div class="fold-wrap">
-      <div class="fold-shader"></div>
-    </div>
     
     <div class="page-wrap">
       <div id="page2" class="page">
@@ -373,12 +349,6 @@ $('#prev').bind('click', function() {
         </div>
       </div>
     </div>
-    <div class="back-wrap">
-      <div class="back"></div>
-    </div>
-    <div class="fold-wrap">
-      <div class="fold-shader"></div>
-    </div>
     
     <div class="page-wrap">
       <div id="page1" class="page">
@@ -388,11 +358,39 @@ $('#prev').bind('click', function() {
         </div>
       </div>
     </div>
+    
     <div class="back-wrap">
       <div class="back"></div>
     </div>
     <div class="fold-wrap">
       <div class="fold-shader"></div>
+    </div>
+    <div class="back-wrap">
+      <div class="back"></div>
+    </div>
+    <div class="fold-wrap">
+      <div class="fold-shader"></div>
+    </div>
+    <div class="back-wrap">
+      <div class="back"></div>
+    </div>
+    <div class="fold-wrap">
+      <div class="fold-shader"></div>
+    </div>
+    <div class="back-wrap">
+      <div class="back"></div>
+    </div>
+    <div class="fold-wrap">
+      <div class="fold-shader"></div>
+    </div>
+    <div class="back-wrap">
+      <div class="back"></div>
+    </div>
+    <div class="fold-wrap">
+      <div class="fold-shader"></div>
+    </div>
+    <div class="back-wrap">
+      <div class="back"></div>
     </div>
     
   </div>
