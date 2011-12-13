@@ -97,12 +97,12 @@ h1 {
 
 .pages>.back-wrap {
   position: absolute;
-  display: none;
   width: 100%;
   height: 200%;
   right: 0;
   top: -50%;
   overflow: hidden;
+  display: none;
 
   -webkit-transform-origin: 100% 25%;
   -webkit-transform: rotate(-25deg) translate(0, 0);
@@ -145,15 +145,14 @@ h1 {
 
 .pages>.fold-wrap {
   position: absolute;
-  display: none;
   overflow: hidden;
   overflow-y: visible;
   width: 200%;
   height: 200%;
   right: 0;
   top: 0;
+  display: none;
 }
-
 .pages>.fold-wrap>.fold-shader {
   width: 4%;
   right: 0;
@@ -199,12 +198,6 @@ h1 {
   -webkit-user-select: none;
 }
 
-#next {
-}
-
-#prev {
-}
-
 </style>
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 <script>
@@ -247,15 +240,18 @@ var PageFlipper = function(pages) {
     setTimeout(function() {
       var thisPage = self.GetTopPageLeft();
       if (thisPage.page.get(0)) {
-        setTimeout(function() {
-          $([thisPage.page.get(0), thisPage.back.get(0), thisPage.fold.get(0)])
-            .css({display: 'block'})
-            .addClass('reverse-transition').removeClass('turned')
-            .bind("webkitTransitionEnd", function() {
-              $([thisPage.page.get(0), thisPage.back.get(0), thisPage.fold.get(0)]).css({display: 'none'});
+        var back = $([thisPage.back.get(0), thisPage.fold.get(0)]),
+          page = $([thisPage.back.get(0), thisPage.fold.get(0), thisPage.page.get(0)]);
+          page.css({display: 'block'})
+          setTimeout(function() {
+            page.addClass('reverse-transition')
+            .removeClass('turned')
+            .bind('webkitTransitionEnd', function(e) {
+              back.css({display: 'none'});
+              e.stopImmediatePropagation();
+              page.unbind('webkitTransitionEnd');
             });
-        }, 0);
-        return true;
+          }, 0);
       }
     }, delay);
   };
@@ -270,12 +266,15 @@ var PageFlipper = function(pages) {
       var thisPage = self.GetTopPageRight();
 
       if (thisPage.page.get(0) && !self.IsLastPage(thisPage.page)) {
+        var page = $([thisPage.back.get(0), thisPage.fold.get(0), thisPage.page.get(0)]);
+        page.css({display: 'block'});
         setTimeout(function() {
-          $([thisPage.page.get(0), thisPage.back.get(0), thisPage.fold.get(0)])
-            .css({display: 'block'})
-            .removeClass('reverse-transition').addClass('turned')
-            .bind("webkitTransitionEnd", function() {
-              $([thisPage.page.get(0), thisPage.back.get(0), thisPage.fold.get(0)]).css({display:'none'});
+          page.removeClass('reverse-transition')
+            .addClass('turned')
+            .bind('webkitTransitionEnd', function(e) {
+              page.css({display:'none'});
+              e.stopImmediatePropagation();
+              page.unbind('webkitTransitionEnd');
             });
         }, 0);
       }
@@ -292,12 +291,12 @@ $('#next').bind('click', function() {
 
 $('#flipback').bind('click', function() {
   var i = flipper.pages.children().length - $('.turned').length;
-  while (i--) flipper.NextPage(i*100);
+  while (i--) flipper.NextPage(i*40);
 });
 
 $('#flipfront').bind('click', function() {
   var i = $('.turned').length;
-  while (i--) flipper.PreviousPage(i*100);
+  while (i--) flipper.PreviousPage(i*40);
 });
 
 $('#prev').bind('click', function() {
@@ -398,9 +397,6 @@ $('#prev').bind('click', function() {
     </div>
     <div class="fold-wrap">
       <div class="fold-shader"></div>
-    </div>
-    <div class="back-wrap">
-      <div class="back"></div>
     </div>
     
   </div>
