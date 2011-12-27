@@ -45,6 +45,8 @@ h1 {
   border-radius: 3px;
   box-shadow: 0 0 50px rgba(0,0,0,0.65);
   border: 10px solid #333;
+  -webkit-transform-style: flat;  
+  -webkit-perspective: 100;
 }
 
 .pages>.page-wrap {
@@ -54,14 +56,14 @@ h1 {
   right: 0;
   top: -250%;
   overflow: hidden;
-  -webkit-transform: rotate(-25deg) translate(0,0);
+  -webkit-transform: rotate(-25deg) translate3d(0,0,0);
   -webkit-transform-origin: 100% 25%;
   -webkit-transition: -webkit-transform 1s ease-out 0,
     -webkit-transform-origin 1s ease-out 0;
 }
 
 .pages>.page-wrap.turned {
-  -webkit-transform: rotate(0) translate(-50%,0);
+  -webkit-transform: rotate(0) translate3d(-50%,0,0);
   -webkit-transform-origin: 50% 25%;
 }
 
@@ -75,13 +77,13 @@ h1 {
   height: 10%;
   overflow: hidden;
   
-  -webkit-transform: rotate(25deg) translate(0,0);
+  -webkit-transform: rotate(25deg) translate3d(0,0,0);
   -webkit-transform-origin: 100% 0;
   -webkit-transition: -webkit-transform 1s ease-out 0;
 }
 
 .pages>.page-wrap.turned>.page {
-  -webkit-transform: rotate(0) translate(100%,0);
+  -webkit-transform: rotate(0) translate3d(100%,0,0);
 }
 
 .pages>.page-wrap>.page>.page-contentwrap {
@@ -104,13 +106,13 @@ h1 {
   display: none;
 
   -webkit-transform-origin: 100% 25%;
-  -webkit-transform: rotate(-25deg) translate(0,0);
+  -webkit-transform: rotate(-25deg) translate3d(0,0,0);
   -webkit-transition: -webkit-transform 1s ease-out 0,
     -webkit-transform-origin 1s ease-out 0;
 }
 
 .pages>.back-wrap.turned {
-  -webkit-transform: rotate(0) translate(-100%,0);
+  -webkit-transform: rotate(0) translate3d(-100%,0,0);
   -webkit-transform-origin: 0 25%;
 }
 
@@ -127,7 +129,7 @@ h1 {
   -webkit-transition: -webkit-transform 1s ease-out 0,
     opacity 500ms ease-out 750ms;
 
-  -webkit-transform: rotate(-25deg) translate(100%,0);
+  -webkit-transform: rotate(-25deg) translate3d(100%,0,0);
   -webkit-transform-origin: 100% 0;
 }
 
@@ -137,7 +139,7 @@ h1 {
 }
 
 .pages>.back-wrap.turned>.back {
-  -webkit-transform: rotate(0) translate(0,0);
+  -webkit-transform: rotate(0) translate3d(0,0,0);
   opacity: 0;
 }
 
@@ -166,7 +168,7 @@ h1 {
     opacity 500ms ease-out 750ms;
 
   -webkit-transform-origin: 50% 0;
-  -webkit-transform: rotate(-25deg) scaleX(0.05) translate(1000%,1%);
+  -webkit-transform: rotate(-25deg) scaleX(0.05) translate3d(1000%,1%,0);
 }
 
 .pages>.fold-wrap.reverse-transition>.fold-shader {
@@ -176,7 +178,7 @@ h1 {
 
 .pages>.fold-wrap.turned>.fold-shader {
   opacity: 0;
-  -webkit-transform: rotate(0) translate(-1200%,0) scaleX(4);
+  -webkit-transform: rotate(0) translate3d(-1200%,0,0) scaleX(4);
 }
 
 .btn {
@@ -229,57 +231,82 @@ var PageFlipper = function(pages) {
     return el.prev().length === 0;
   };
 
+  this.Turn = function(page, dir) {
+    var pages = this.pages;
+    
+    if (page.page.get(0) && !this.IsLastPage(page.page)) {
+      var back = $([page.back.get(0), page.fold.get(0)]).show(),
+        all = $([page.back.get(0), page.fold.get(0), page.page.get(0)]);
+
+
+
+      // [ ] show next page if 'next'
+      // [ ] show previous page if 'previous'
+      // [x] hide previous page on complete if 'next'
+      // [ ] hide next page on complete if 'previous'
+
+      setTimeout(function() {
+        all.addClass(dir === 'previous' ? 'reverse-transition' : 'turned')
+          .removeClass(dir === 'previous' ? 'turned' : 'reverse-transition')
+          .one('webkitTransitionEnd', function(e) {
+            if (dir === 'next') all.hide();
+            else back.hide();
+        });
+      }.bind(this), 0);
+    }
+  };
+
   //  Animate page turn to back one page
   this.PreviousPage = function(delay) {
-    var pages = this.pages,
-      self = this;
     delay = delay || 0;
-    
     setTimeout(function() {
-      var thisPage = self.GetTopPageLeft();
-      if (thisPage.page.get(0)) {
-        var back = $([thisPage.back.get(0), thisPage.fold.get(0)]),
-          page = $([thisPage.back.get(0), thisPage.fold.get(0), thisPage.page.get(0)]);
-          page.css({display: 'block'})
-          setTimeout(function() {
-            page.addClass('reverse-transition')
-            .removeClass('turned')
-            .bind('webkitTransitionEnd', function(e) {
-              back.css({display: 'none'});
-              e.stopImmediatePropagation();
-              page.unbind('webkitTransitionEnd');
-            });
-          }, 0);
-      }
-    }, delay);
+      var p = this.GetTopPageLeft();
+      this.Turn(p, 'previous');
+    }.bind(this), delay);
   };
 
   //  Animate a page turn forward
   this.NextPage = function(delay) {
+    delay = delay || 0;
+    setTimeout(function() {
+      var p = this.GetTopPageRight();
+      this.Turn(p, 'next');
+    }.bind(this), delay);
+  };
+
+  this.TurnImmediate = function(page, dir) {
     var pages = this.pages,
       self = this;
-    delay = delay || 0;
    
-    setTimeout(function() {
-      var thisPage = self.GetTopPageRight();
+    if (page.page.get(0) && !self.IsLastPage(page.page)) {
+      var all = $([page.page.get(0), page.back.get(0), page.fold.get(0)]), 
+        back = $([page.back.get(0), page.fold.get(0)]);
+        
+      all.css({display: dir === 'next' ? 'none' : 'block'})
+        .removeClass(dir === 'next' ? 'reverse-transition' : 'turned')
+        .addClass(dir === 'next' ? 'turned' : 'reverse-transition')
+      back.css({display: 'none'});
+    }
+  };
 
-      if (thisPage.page.get(0) && !self.IsLastPage(thisPage.page)) {
-        var page = $([thisPage.back.get(0), thisPage.fold.get(0), thisPage.page.get(0)]);
-        page.css({display: 'block'});
-        setTimeout(function() {
-          page.removeClass('reverse-transition')
-            .addClass('turned')
-            .bind('webkitTransitionEnd', function(e) {
-              page.css({display:'none'});
-              e.stopImmediatePropagation();
-              page.unbind('webkitTransitionEnd');
-            });
-        }, 0);
-      }
-    }, delay);
+  this.NextPageImmediate = function(delay) {
+    delay = delay || 0;
+    setTimeout(function() { 
+      var p = this.GetTopPageRight();
+      this.TurnImmediate(p, 'next');
+    }.bind(this), delay);
+  };
+  
+  this.PreviousPageImmediate = function(delay) {
+    delay = delay || 0;
+    setTimeout(function() { 
+      var p = this.GetTopPageLeft();
+      this.TurnImmediate(p, 'previous');
+    }.bind(this), delay);
   };
 
 };
+
 
 var flipper = new PageFlipper($('.pages'));
 
