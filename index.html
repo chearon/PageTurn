@@ -203,10 +203,80 @@ h1 {
 <script>
 jQuery(function($) {
 
-var PageFlipper = function(pages) {
-  this.pages = pages;
+/**
+ *  Page object - node in a linked list.  Must be initialized with previous,
+ *  so you're expected to create these in a start-to-end fashion.  Calling
+ *  turn() and turnBackward() return the previous and next pages respectively
+ *  for nice chaining.
+ *  @constructor
+ */
+var Page = function(pageWrapEl, previous) {
+  this.el = pageWrapEl;
+  this.turned = false;
+  this.visible = false;
+  this.previous = previous;
+  this.next = undefined;
   
-  //  Return the last .page-wrap, !.turned element (so the one that appears on top)
+  //  Set up the last page's next pointer, unless we're on the first page
+  if (previous) previous.next = this;
+  
+  /**
+   * Hide this page
+   * @returns Page this
+   */
+  this.hide = function() {
+    $(this.el).hide();
+    return this;
+  };
+
+  /**
+   * Turn the page off of the screen to reveal the one below,
+   * and return the one below.
+   * @returns Page next
+   */
+  this.turn = function() {
+    var hide = this.hide.bind(this);
+    if (this.next) this.next.show();
+
+    $(this.el).removeClass('reverse-transition')
+      .addClass('turned')
+      .one('webkitTransitionEnd', hide);
+    return this.next;
+  };
+
+  /**
+   * Turn the last page turned back onto the screen, revealing it
+   * and hiding the one that was visible on call.
+   * @returns Page previosu
+   */
+  this.turnBackward = function() {
+    var hide = this.hide.bind(this);
+    if (this.previous) this.previous.show();
+
+    $(this.el).addClass('reverse-transition')
+      .removeClass('turned')
+      .one('webkitTransitionEnd', hide);
+    return this.previous;
+  };
+};
+
+/**
+ * Holds the linked list of {@link Page}s and provides flipping
+ * functionality and management
+ * @constructor
+ */
+var PageFlipper = function($pages) {
+  // __init__
+  var previous = undefined;
+  this.pages = $pages.find('.page-wrap').toArray().map(function newPage(el) { 
+    var page = new Page(el, previous);
+    previous = page;
+    return page;
+  });
+
+  /**
+   * Return the last .page-wrap, !.turned element (so the one that appears on top)
+   */
   this.GetTopPageRight = function() {
     var page = this.pages.children('.page-wrap').not('.turned').last();
     return {
@@ -237,8 +307,6 @@ var PageFlipper = function(pages) {
     if (page.page.get(0) && !this.IsLastPage(page.page)) {
       var back = $([page.back.get(0), page.fold.get(0)]).show(),
         all = $([page.back.get(0), page.fold.get(0), page.page.get(0)]);
-
-
 
       // [ ] show next page if 'next'
       // [ ] show previous page if 'previous'
