@@ -168,7 +168,7 @@ h1 {
     opacity 500ms ease-out 750ms;
 
   -webkit-transform-origin: 50% 0;
-  -webkit-transform: rotate(-25deg) scaleX(0.05) translate3d(1000%,1%,0);
+  -webkit-transform: rotate(-25deg) translate3d(1000%,1%,0) scaleX(0.05);
 }
 
 .pages>.fold-wrap.reverse-transition>.fold-shader {
@@ -349,21 +349,19 @@ var flipper = new PageFlipper($('.pages'));
 window.pf = flipper;
 
 $('#next').bind('click', function() {
-  flipper.NextPage();
+  flipper.next();
 });
 
 $('#flipback').bind('click', function() {
-  var i = flipper.pages.children().length - $('.turned').length;
-  while (i--) flipper.NextPage(i*40);
+
 });
 
 $('#flipfront').bind('click', function() {
-  var i = $('.turned').length;
-  while (i--) flipper.PreviousPage(i*40);
+
 });
 
 $('#prev').bind('click', function() {
-  flipper.PreviousPage();
+  flipper.previous();
 });
 
 }); // jQuery
