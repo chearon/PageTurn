@@ -262,7 +262,7 @@ var Page = function(pageWrapEl, previous) {
     if (this.next) this.next.show();
     $(this.el).removeClass('reverse-transition').addClass('turned');
     return this.next;
-  }
+  };
 
   /**
    * Turn the page on the left back onto the screen, covering
@@ -270,12 +270,12 @@ var Page = function(pageWrapEl, previous) {
    * @returns Page previous
    */
   this.turnBackward = function() {
-    var hide = this.next.hide.bind(this.next);
-    this.show();
+    var hide = this.hide.bind(this);
+    if (this.previous) this.previous.show();
 
-    $(this.el).addClass('reverse-transition');
+    $(this.previous.el).addClass('reverse-transition');
     setTimeout(function() {
-      $(this.el).removeClass('turned')
+      $(this.previous.el).removeClass('turned')
         .one('webkitTransitionEnd', hide);
     }.bind(this), 0);
     return this.previous;
@@ -289,7 +289,7 @@ var Page = function(pageWrapEl, previous) {
     this.hide();
     if (this.previous) this.previous.show();
     $(this.el).removeClass('turned').addClass('reverse-transition');
-    return this.previous
+    return this.previous;
   };
 };
 
