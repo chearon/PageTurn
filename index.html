@@ -45,7 +45,7 @@ h1 {
   border-radius: 3px;
   box-shadow: 0 0 50px rgba(0,0,0,0.65);
   border: 10px solid #333;
-  -webkit-transform-style: flat;  
+  -webkit-transform-style: flat;
   -webkit-perspective: 100;
 }
 
@@ -166,7 +166,7 @@ h1 {
     opacity 500ms ease-out 750ms;
 
   -webkit-transform-origin: 50% 0;
-  -webkit-transform: rotate(-25deg) translate3d(1000%,1%,0) scaleX(0.05);
+  -webkit-transform: rotate(-25deg) translate3d(10%,0,0) scaleX(0.05);
 }
 
 .pages>.fold-wrap.reverse-transition>.fold-shader {
@@ -344,6 +344,8 @@ var PageFlipper = function($pages) {
   this.currentFold = this.folds[0];
 
   if (this.currentPage) this.currentPage.show();
+  if (this.currentBack) this.currentBack.show();
+  if (this.currentFold) this.currentFold.show();
 
   /**
    * Turn the current page
@@ -462,6 +464,24 @@ $('#prev').bind('click', function() {
       </div>
     </div>
     
+    <div class="back-wrap" style="display: none;">
+      <div class="back"></div>
+    </div>
+    <div class="fold-wrap" style="display: none;">
+      <div class="fold-shader"></div>
+    </div>
+    <div class="back-wrap" style="display: none;">
+      <div class="back"></div>
+    </div>
+    <div class="fold-wrap" style="display: none;">
+      <div class="fold-shader"></div>
+    </div>
+    <div class="back-wrap" style="display: none;">
+      <div class="back"></div>
+    </div>
+    <div class="fold-wrap" style="display: none;">
+      <div class="fold-shader"></div>
+    </div>
     <div class="back-wrap" style="display: none;">
       <div class="back"></div>
     </div>
