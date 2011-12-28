@@ -58,13 +58,11 @@ h1 {
   overflow: hidden;
   -webkit-transform: rotate(-25deg) translate3d(0,0,0);
   -webkit-transform-origin: 100% 25%;
-  -webkit-transition: -webkit-transform 1s ease-out 0,
-    -webkit-transform-origin 1s ease-out 0;
+  -webkit-transition: -webkit-transform 1s ease-out 0;
 }
 
 .pages>.page-wrap.turned {
   -webkit-transform: rotate(0) translate3d(-50%,0,0);
-  -webkit-transform-origin: 50% 25%;
 }
 
 .pages>.page-wrap>.page {
@@ -83,7 +81,7 @@ h1 {
 }
 
 .pages>.page-wrap.turned>.page {
-  -webkit-transform: rotate(0) translate3d(100%,0,0);
+  -webkit-transform: rotate(0) translate(100%, 0);
 }
 
 .pages>.page-wrap>.page>.page-contentwrap {
