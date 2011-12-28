@@ -363,7 +363,8 @@ var PageFlipper = function($pages) {
    */
   this.previous = function() {
     this.currentPage = this.currentPage.turnBackward();
-
+    this.currentFold = this.currentFold.turnBackward();
+    this.currentBack = this.currentBack.turnBackward();
     return this;
   };
 
@@ -374,8 +375,18 @@ var PageFlipper = function($pages) {
    */
   this.jump = function(index) {
     var i = (this.pages.indexOf(this.currentPage) || 0);
-    while (i < index) { this.currentPage = this.pages[i].turnImmediate(); ++i; }
-    while (i > index) { this.currentPage = this.pages[i].turnBackwardImmediate(); --i; }
+    while (i < index) { 
+      this.currentPage = this.pages[i].turnImmediate(); 
+      this.currentFold = this.currentFold.turnImmediate();
+      this.currentBack = this.currentBack.turnImmediate();
+      ++i;
+    }
+    while (i > index) { 
+      this.currentPage = this.pages[i].turnBackwardImmediate();
+      this.currentFold = this.currentFold.turnBackwardImmediate();
+      this.currentBack = this.currentBack.turnBackwardImmediate();
+      --i; 
+    }
   };
 };
 
