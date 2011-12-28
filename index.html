@@ -258,9 +258,10 @@ var Page = function(pageWrapEl, previous) {
    * @returns Page next
    */
   this.turnImmediate = function() {
-    this.hide();
-    if (this.next) this.next.show();
-    $(this.el).removeClass('reverse-transition').addClass('turned');
+    if (this.next) {
+      $(this.hide().next.hide().el).addClass('turned').removeClass('reverse-transition');
+      $(this.el).removeClass('reverse-transition').addClass('turned');
+    }
     return this.next;
   };
 
@@ -282,13 +283,14 @@ var Page = function(pageWrapEl, previous) {
   };
 
   /**
-   * Turn backward without animatin
+   * Turn backward without animating
    * @returns Page previous
    */
   this.turnBackwardImmediate = function() {
-    this.hide();
-    if (this.previous) this.previous.show();
-    $(this.el).removeClass('turned').addClass('reverse-transition');
+    if (this.previous) {
+      this.hide().previous.show();
+      $(this.el).removeClass('turned').addClass('reverse-transition');
+    }
     return this.previous;
   };
 };
@@ -300,13 +302,11 @@ var Page = function(pageWrapEl, previous) {
 var PageFlipper = function($pages) {
   // __init__
   var previous = undefined;
-  this.pages = $pages.find('.page-wrap')
-    .toArray().reverse()
+  this.pages = $pages.find('.page-wrap').toArray().reverse()
     .map(function newPage(el) { 
-      var page = new Page(el, previous);
-      previous = page;
-      return page;
+      return (previous = new Page(el, previous));
     });
+  this.backpages = $pages.find('.back-wrap, .fold-wrap').toArray();
 
   if (this.pages[0]) this.pages[0].show();
 
@@ -470,24 +470,6 @@ $('#prev').bind('click', function() {
       </div>
     </div>
     
-    <div class="back-wrap">
-      <div class="back"></div>
-    </div>
-    <div class="fold-wrap">
-      <div class="fold-shader"></div>
-    </div>
-    <div class="back-wrap">
-      <div class="back"></div>
-    </div>
-    <div class="fold-wrap">
-      <div class="fold-shader"></div>
-    </div>
-    <div class="back-wrap">
-      <div class="back"></div>
-    </div>
-    <div class="fold-wrap">
-      <div class="fold-shader"></div>
-    </div>
     <div class="back-wrap">
       <div class="back"></div>
     </div>
