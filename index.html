@@ -103,7 +103,6 @@ h1 {
   right: 0;
   top: -50%;
   overflow: hidden;
-  display: none;
 
   -webkit-transform-origin: 100% 25%;
   -webkit-transform: rotate(-25deg) translate3d(0,0,0);
@@ -151,7 +150,6 @@ h1 {
   height: 200%;
   right: 0;
   top: 0;
-  display: none;
 }
 .pages>.fold-wrap>.fold-shader {
   width: 4%;
@@ -324,28 +322,37 @@ var Page = function(pageWrapEl, previous) {
   };
 };
 
+function arrayToPages(array) {
+  var previous = undefined;
+  return array.map(function newPage(el) { 
+    return (previous = new Page(el, previous));
+  });
+}
+
 /**
  * Holds the linked list of {@link Page}s - keeps track of current page
  * @constructor
  */
 var PageFlipper = function($pages) {
   // __init__
-  var previous = undefined;
-  this.pages = $pages.find('.page-wrap').toArray().reverse()
-    .map(function newPage(el) { 
-      return (previous = new Page(el, previous));
-    });
-  this.backpages = $pages.find('.back-wrap, .fold-wrap').toArray();
-  this.current = this.pages[0];
+  this.pages = arrayToPages($pages.find('.page-wrap').toArray().reverse());
+  this.backs = arrayToPages($pages.find('.back-wrap').toArray());
+  this.folds = arrayToPages($pages.find('.fold-wrap').toArray());
 
-  if (this.current) this.current.show();
+  this.currentPage = this.pages[0];
+  this.currentBack = this.backs[0];
+  this.currentFold = this.folds[0];
+
+  if (this.currentPage) this.currentPage.show();
 
   /**
    * Turn the current page
    * @returns PageFlipper this For chaining
    */
   this.next = function() {
-    this.current = this.current.turn();
+    this.currentPage = this.currentPage.turn();
+    this.currentFold = this.currentFold.turn();
+    this.currentBack = this.currentBack.turn();
     return this;
   };
 
@@ -354,7 +361,8 @@ var PageFlipper = function($pages) {
    * @returns PageFlipper this For chaining
    */
   this.previous = function() {
-    this.current = this.current.turnBackward();
+    this.currentPage = this.currentPage.turnBackward();
+
     return this;
   };
 
@@ -364,9 +372,9 @@ var PageFlipper = function($pages) {
    * @returns PageFlipper this For chaining
    */
   this.jump = function(index) {
-    var i = (this.pages.indexOf(this.current) || 0);
-    while (i < index) { this.current = this.pages[i].turnImmediate(); ++i; }
-    while (i > index) { this.current = this.pages[i].turnBackwardImmediate(); --i; }
+    var i = (this.pages.indexOf(this.currentPage) || 0);
+    while (i < index) { this.currentPage = this.pages[i].turnImmediate(); ++i; }
+    while (i > index) { this.currentPage = this.pages[i].turnBackwardImmediate(); --i; }
   };
 };
 
@@ -454,16 +462,16 @@ $('#prev').bind('click', function() {
       </div>
     </div>
     
-    <div class="back-wrap">
+    <div class="back-wrap" style="display: none;">
       <div class="back"></div>
     </div>
-    <div class="fold-wrap">
+    <div class="fold-wrap" style="display: none;">
       <div class="fold-shader"></div>
     </div>
-    <div class="back-wrap">
+    <div class="back-wrap" style="display: none;">
       <div class="back"></div>
     </div>
-    <div class="fold-wrap">
+    <div class="fold-wrap" style="display: none;">
       <div class="fold-shader"></div>
     </div>
     
