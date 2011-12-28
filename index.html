@@ -270,9 +270,11 @@ var Page = function(pageWrapEl, previous) {
     var hide = this.hide.bind(this);
     if (this.next) {
       this.next.show();
-      $(this.el).removeClass('reverse-transition')
-        .addClass('turned')
-        .one('webkitTransitionEnd', hide);
+      $(this.el).removeClass('reverse-transition');
+      setTimeout(function() {
+        $(this.el).addClass('turned')
+          .one('webkitTransitionEnd', hide);
+      }.bind(this), 0);
     }
     return (this.next || this);
   };
@@ -283,8 +285,9 @@ var Page = function(pageWrapEl, previous) {
    */
   this.turnImmediate = function() {
     if (this.next) {
-      $(this.hide().next.hide().el).addClass('turned').removeClass('reverse-transition');
+      this.hide();
       $(this.el).removeClass('reverse-transition').addClass('turned');
+      this.next.show();
     }
     return (this.next || this);
   };
@@ -298,7 +301,6 @@ var Page = function(pageWrapEl, previous) {
     var hide = this.hide.bind(this);
     if (this.previous) {
       this.previous.show();
-
       $(this.previous.el).addClass('reverse-transition');
       setTimeout(function() {
         $(this.previous.el).removeClass('turned')
@@ -314,8 +316,9 @@ var Page = function(pageWrapEl, previous) {
    */
   this.turnBackwardImmediate = function() {
     if (this.previous) {
-      this.hide().previous.show();
-      $(this.el).removeClass('turned').addClass('reverse-transition');
+      this.hide();
+      $(this.previous.el).addClass('reverse-transition').removeClass('turned');
+      this.previous.show()
     }
     return (this.previous || this);
   };
@@ -361,9 +364,9 @@ var PageFlipper = function($pages) {
    * @returns PageFlipper this For chaining
    */
   this.jump = function(index) {
-    this.current.hide();
-    this.current = (this.pages[index] || this.current);
-    this.current.show();
+    var i = (this.pages.indexOf(this.current) || 0);
+    while (i < index) { this.current = this.pages[i].turnImmediate(); ++i; }
+    while (i > index) { this.current = this.pages[i].turnBackwardImmediate(); --i; }
   };
 };
 
@@ -375,11 +378,11 @@ $('#next').bind('click', function() {
 });
 
 $('#flipback').bind('click', function() {
-
+  flipper.jump($('.pages > .page-wrap').length-1);
 });
 
 $('#flipfront').bind('click', function() {
-
+  flipper.jump(0);
 });
 
 $('#prev').bind('click', function() {
