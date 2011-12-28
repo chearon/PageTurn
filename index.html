@@ -221,11 +221,20 @@ var Page = function(pageWrapEl, previous) {
   if (previous) previous.next = this;
   
   /**
-   * Hide this page
+   * Hide this page (as in CSS)
    * @returns Page this
    */
   this.hide = function() {
     $(this.el).hide();
+    return this;
+  };
+
+  /**
+   * Show this page (as in CSS)
+   * @returns Page this
+   */
+  this.show = function() {
+    $(this.el).show();
     return this;
   };
 
@@ -268,38 +277,13 @@ var Page = function(pageWrapEl, previous) {
 var PageFlipper = function($pages) {
   // __init__
   var previous = undefined;
-  this.pages = $pages.find('.page-wrap').toArray().map(function newPage(el) { 
-    var page = new Page(el, previous);
-    previous = page;
-    return page;
-  });
-
-  /**
-   * Return the last .page-wrap, !.turned element (so the one that appears on top)
-   */
-  this.GetTopPageRight = function() {
-    var page = this.pages.children('.page-wrap').not('.turned').last();
-    return {
-      page: page, 
-      back: this.pages.children('.back-wrap').not('.turned').first(),
-      fold: this.pages.children('.fold-wrap').not('.turned').first()
-    };
-  };
-
-  //  Return the last .page-wrap.turned element (the topmost on the left)
-  this.GetTopPageLeft = function() {
-    var page = this.pages.children('.page-wrap.turned').first();
-    return {
-      page: page, 
-      back: this.pages.children('.back-wrap.turned').last(),
-      fold: this.pages.children('.fold-wrap.turned').last()
-    };
-  };
-
-  //  Is this the last page?  True if it as at the top of the list
-  this.IsLastPage = function(el) {
-    return el.prev().length === 0;
-  };
+  this.pages = $pages.find('.page-wrap')
+    .toArray().reverse()
+    .map(function newPage(el) { 
+      var page = new Page(el, previous);
+      previous = page;
+      return page;
+    });
 
   this.Turn = function(page, dir) {
     var pages = this.pages;
@@ -375,8 +359,8 @@ var PageFlipper = function($pages) {
 
 };
 
-
 var flipper = new PageFlipper($('.pages'));
+window.pf = flipper;
 
 $('#next').bind('click', function() {
   flipper.NextPage();
