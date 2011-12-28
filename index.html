@@ -254,17 +254,19 @@ var Page = function(pageWrapEl, previous) {
   };
 
   /**
-   * Turn the last page turned back onto the screen, revealing it
-   * and hiding the one that was visible on call.
-   * @returns Page previosu
+   * Turn the page on the left back onto the screen, covering
+   * up this page and returning the new one on top.
+   * @returns Page previous
    */
   this.turnBackward = function() {
-    var hide = this.hide.bind(this);
-    if (this.previous) this.previous.show();
+    var hide = this.next.hide.bind(this.next);
+    this.show();
 
-    $(this.el).addClass('reverse-transition')
-      .removeClass('turned')
-      .one('webkitTransitionEnd', hide);
+    $(this.el).addClass('reverse-transition');
+    setTimeout(function() {
+      $(this.el).removeClass('turned')
+        .one('webkitTransitionEnd', hide);
+    }.bind(this), 0);
     return this.previous;
   };
 };
@@ -284,6 +286,8 @@ var PageFlipper = function($pages) {
       previous = page;
       return page;
     });
+
+  if (this.pages[0]) this.pages[0].show();
 
   this.Turn = function(page, dir) {
     var pages = this.pages;
@@ -387,7 +391,7 @@ $('#prev').bind('click', function() {
 <div id="container">
   <div class="pages">
 
-    <div class="page-wrap">
+    <div class="page-wrap" style="display: none;">
       <div id="page6" class="page">
         <div class="page-contentwrap">
            <img src="images/end.jpg" style="width: 100%" /> 
@@ -395,7 +399,7 @@ $('#prev').bind('click', function() {
       </div>
     </div>
     
-    <div class="page-wrap">
+    <div class="page-wrap" style="display: none;">
       <div id="page5" class="page">
         <div class="page-contentwrap">
           <h1>Monster</h1>
@@ -406,7 +410,7 @@ $('#prev').bind('click', function() {
       </div>
     </div>
 
-    <div class="page-wrap">
+    <div class="page-wrap" style="display: none;">
       <div id="page4" class="page">
         <div class="page-contentwrap">
           <h1>Starbucks!</h1>
@@ -416,7 +420,7 @@ $('#prev').bind('click', function() {
       </div>
     </div>
 
-    <div class="page-wrap">
+    <div class="page-wrap" style="display: none;">
       <div id="page3" class="page">
         <div class="page-contentwrap">
           <h1>Red Bull</h1>
@@ -426,7 +430,7 @@ $('#prev').bind('click', function() {
       </div>
     </div>
     
-    <div class="page-wrap">
+    <div class="page-wrap" style="display: none;">
       <div id="page2" class="page">
         <div class="page-contentwrap">
           <h1>Caffeine</h1>
@@ -436,7 +440,7 @@ $('#prev').bind('click', function() {
       </div>
     </div>
     
-    <div class="page-wrap">
+    <div class="page-wrap" style="display: none;">
       <div id="page1" class="page">
         <div class="page-contentwrap">
           <h1>Ways to Get Caffeine</h1>
