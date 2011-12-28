@@ -245,11 +245,12 @@ var Page = function(pageWrapEl, previous) {
    */
   this.turn = function() {
     var hide = this.hide.bind(this);
-    if (this.next) this.next.show();
-
-    $(this.el).removeClass('reverse-transition')
-      .addClass('turned')
-      .one('webkitTransitionEnd', hide);
+    if (this.next) {
+      this.next.show();
+      $(this.el).removeClass('reverse-transition')
+        .addClass('turned')
+        .one('webkitTransitionEnd', hide);
+    }
     return this.next;
   };
 
@@ -272,13 +273,15 @@ var Page = function(pageWrapEl, previous) {
    */
   this.turnBackward = function() {
     var hide = this.hide.bind(this);
-    if (this.previous) this.previous.show();
+    if (this.previous) {
+      this.previous.show();
 
-    $(this.previous.el).addClass('reverse-transition');
-    setTimeout(function() {
-      $(this.previous.el).removeClass('turned')
-        .one('webkitTransitionEnd', hide);
-    }.bind(this), 0);
+      $(this.previous.el).addClass('reverse-transition');
+      setTimeout(function() {
+        $(this.previous.el).removeClass('turned')
+          .one('webkitTransitionEnd', hide);
+      }.bind(this), 0);
+    }
     return this.previous;
   };
 
@@ -310,78 +313,14 @@ var PageFlipper = function($pages) {
 
   if (this.pages[0]) this.pages[0].show();
 
-  this.Turn = function(page, dir) {
+  this.next = function(page, dir) {
     var pages = this.pages;
-    
-    if (page.page.get(0) && !this.IsLastPage(page.page)) {
-      var back = $([page.back.get(0), page.fold.get(0)]).show(),
-        all = $([page.back.get(0), page.fold.get(0), page.page.get(0)]);
-
-      // [ ] show next page if 'next'
-      // [ ] show previous page if 'previous'
-      // [x] hide previous page on complete if 'next'
-      // [ ] hide next page on complete if 'previous'
-
-      setTimeout(function() {
-        all.addClass(dir === 'previous' ? 'reverse-transition' : 'turned')
-          .removeClass(dir === 'previous' ? 'turned' : 'reverse-transition')
-          .one('webkitTransitionEnd', function(e) {
-            if (dir === 'next') all.hide();
-            else back.hide();
-        });
-      }.bind(this), 0);
     }
   };
 
-  //  Animate page turn to back one page
-  this.PreviousPage = function(delay) {
-    delay = delay || 0;
-    setTimeout(function() {
-      var p = this.GetTopPageLeft();
-      this.Turn(p, 'previous');
-    }.bind(this), delay);
-  };
+  this.previous = function(delay) {
 
-  //  Animate a page turn forward
-  this.NextPage = function(delay) {
-    delay = delay || 0;
-    setTimeout(function() {
-      var p = this.GetTopPageRight();
-      this.Turn(p, 'next');
-    }.bind(this), delay);
   };
-
-  this.TurnImmediate = function(page, dir) {
-    var pages = this.pages,
-      self = this;
-   
-    if (page.page.get(0) && !self.IsLastPage(page.page)) {
-      var all = $([page.page.get(0), page.back.get(0), page.fold.get(0)]), 
-        back = $([page.back.get(0), page.fold.get(0)]);
-        
-      all.css({display: dir === 'next' ? 'none' : 'block'})
-        .removeClass(dir === 'next' ? 'reverse-transition' : 'turned')
-        .addClass(dir === 'next' ? 'turned' : 'reverse-transition')
-      back.css({display: 'none'});
-    }
-  };
-
-  this.NextPageImmediate = function(delay) {
-    delay = delay || 0;
-    setTimeout(function() { 
-      var p = this.GetTopPageRight();
-      this.TurnImmediate(p, 'next');
-    }.bind(this), delay);
-  };
-  
-  this.PreviousPageImmediate = function(delay) {
-    delay = delay || 0;
-    setTimeout(function() { 
-      var p = this.GetTopPageLeft();
-      this.TurnImmediate(p, 'previous');
-    }.bind(this), delay);
-  };
-
 };
 
 var flipper = new PageFlipper($('.pages'));
@@ -490,10 +429,10 @@ $('#prev').bind('click', function() {
   Previous Page
 </div>
 <div id="flipfront" class="btn">
-  Flip to front
+  Flip to front efficiently
 </div>
 <div id="flipback" class="btn">
-  Flip to back
+  Flip to back efficiently
 </div>
 <div id="next" class="btn">
   Next Page
