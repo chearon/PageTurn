@@ -274,7 +274,7 @@ var Page = function(pageWrapEl, previous) {
         .addClass('turned')
         .one('webkitTransitionEnd', hide);
     }
-    return this.next;
+    return (this.next || this);
   };
 
   /**
@@ -286,7 +286,7 @@ var Page = function(pageWrapEl, previous) {
       $(this.hide().next.hide().el).addClass('turned').removeClass('reverse-transition');
       $(this.el).removeClass('reverse-transition').addClass('turned');
     }
-    return this.next;
+    return (this.next || this);
   };
 
   /**
@@ -305,7 +305,7 @@ var Page = function(pageWrapEl, previous) {
           .one('webkitTransitionEnd', hide);
       }.bind(this), 0);
     }
-    return this.previous;
+    return (this.previous || this);
   };
 
   /**
@@ -317,7 +317,7 @@ var Page = function(pageWrapEl, previous) {
       this.hide().previous.show();
       $(this.el).removeClass('turned').addClass('reverse-transition');
     }
-    return this.previous;
+    return (this.previous || this);
   };
 };
 
@@ -333,15 +333,37 @@ var PageFlipper = function($pages) {
       return (previous = new Page(el, previous));
     });
   this.backpages = $pages.find('.back-wrap, .fold-wrap').toArray();
+  this.current = this.pages[0];
 
-  if (this.pages[0]) this.pages[0].show();
+  if (this.current) this.current.show();
 
-  this.next = function(page, dir) {
-    var pages = this.pages;
+  /**
+   * Turn the current page
+   * @returns PageFlipper this For chaining
+   */
+  this.next = function() {
+    this.current = this.current.turn();
+    return this;
   };
 
-  this.previous = function(delay) {
+  /**
+   * Turn the current page backwards
+   * @returns PageFlipper this For chaining
+   */
+  this.previous = function() {
+    this.current = this.current.turnBackward();
+    return this;
+  };
 
+  /**
+   * Jump to a page without animation
+   * @param Integer index The page to jump to
+   * @returns PageFlipper this For chaining
+   */
+  this.jump = function(index) {
+    this.current.hide();
+    this.current = (this.pages[index] || this.current);
+    this.current.show();
   };
 };
 
