@@ -30,7 +30,7 @@ h1 {
 
 #container {
   overflow: hidden;
-  height: 635px;
+  height: 700px;
   left: 0;
   top: 0;
   padding: 20px;
@@ -99,7 +99,7 @@ h1 {
   overflow-x: hidden;
 }
 
-.pages>.back-wrap {
+.pages>.back-wrap>.white-wrap {
   position: absolute;
   width: 100%;
   height: 200%;
@@ -114,14 +114,14 @@ h1 {
     -webkit-transform-origin 1s ease-out 0;
 }
 
-.pages>.back-wrap.animating { display: block; }
+.pages>.back-wrap.animating>.white-wrap { display: block; }
 
-.pages>.back-wrap.turned {
+.pages>.back-wrap.turned>.white-wrap {
   -webkit-transform: rotate3d(0,0,1,0) translate3d(-100%,0,0);
   -webkit-transform-origin: 0 25% 0;
 }
 
-.pages>.back-wrap>.back {
+.pages>.back-wrap>.white-wrap>.white {
   z-index: 10;
   width: 100%;
   height: 50%;
@@ -138,17 +138,17 @@ h1 {
   -webkit-transform-origin: 100% 0 0;
 }
 
-.pages>.back-wrap.reverse-transition>.back {
+.pages>.back-wrap.reverse-transition>.white-wrap>.white {
   -webkit-transition: -webkit-transform 1s ease-out 0,
     opacity 0 ease-out 0;
 }
 
-.pages>.back-wrap.turned>.back {
+.pages>.back-wrap.turned>.white-wrap>.white {
   -webkit-transform: rotate3d(0,0,1,0) translate3d(0,0,0);
   opacity: 0;
 }
 
-.pages>.fold-wrap {
+.pages>.back-wrap>.fold-wrap {
   position: absolute;
   overflow: hidden;
   overflow-y: visible;
@@ -159,9 +159,9 @@ h1 {
   display: none; /* overridden by .animating */
 }
 
-.pages>.fold-wrap.animating { display: block; }
+.pages>.back-wrap.animating>.fold-wrap { display: block; }
 
-.pages>.fold-wrap>.fold-shader {
+.pages>.back-wrap>.fold-wrap>.fold-shader {
   width: 2%;
   right: -1%;
   height: 100%;
@@ -178,18 +178,19 @@ h1 {
   -webkit-transform:  translate3d(0,0,0) rotate3d(0,0,1,-15deg) scale3d(0.05, 1, 1);
 }
 
-.pages>.fold-wrap.reverse-transition>.fold-shader {
+.pages>.back-wrap.reverse-transition>.fold-wrap>.fold-shader {
   -webkit-transition: -webkit-transform 1s ease-out 0,
     opacity 0 ease-out 0;
 }
 
-.pages>.fold-wrap.turned>.fold-shader {
+.pages>.back-wrap.turned>.fold-wrap>.fold-shader {
   opacity: 0;
   -webkit-transform: translate3d(-5000%,0,0) rotate3d(0,0,1,0) scale3d(10, 1, 1);
 }
 
 .btn {
   position: relative;
+  bottom: 50px;
   display: inline;
   width: auto;
   height: auto;
@@ -360,15 +361,12 @@ var PageFlipper = function($pages) {
   // __init__
   this.pages = arrayToPages($pages.find('.page-wrap').toArray().reverse());
   this.backs = arrayToPages($pages.find('.back-wrap').toArray());
-  this.folds = arrayToPages($pages.find('.fold-wrap').toArray());
 
   this.currentPage = this.pages[0];
   this.currentBack = this.backs[0];
-  this.currentFold = this.folds[0];
 
   if (this.currentPage) this.currentPage.setCurrent();
   if (this.currentBack) this.currentBack.setCurrent();
-  if (this.currentFold) this.currentFold.setCurrent();
 
   /**
    * Turn the current page
@@ -376,7 +374,6 @@ var PageFlipper = function($pages) {
    */
   this.next = function() {
     this.currentPage = this.currentPage.turn();
-    this.currentFold = this.currentFold.turn();
     this.currentBack = this.currentBack.turn();
     return this;
   };
@@ -387,7 +384,6 @@ var PageFlipper = function($pages) {
    */
   this.previous = function() {
     this.currentPage = this.currentPage.turnBackward();
-    this.currentFold = this.currentFold.turnBackward();
     this.currentBack = this.currentBack.turnBackward();
     return this;
   };
@@ -401,13 +397,11 @@ var PageFlipper = function($pages) {
     var i = (this.pages.indexOf(this.currentPage) || 0);
     while (i < index) { 
       this.currentPage = this.pages[i].turnImmediate(); 
-      this.currentFold = this.currentFold.turnImmediate();
       this.currentBack = this.currentBack.turnImmediate();
       ++i;
     }
     while (i > index) { 
       this.currentPage = this.pages[i].turnBackwardImmediate();
-      this.currentFold = this.currentFold.turnBackwardImmediate();
       this.currentBack = this.currentBack.turnBackwardImmediate();
       --i; 
     }
@@ -511,40 +505,52 @@ $(document).bind('keydown', function(key) {
     </div>
     
     <div class="back-wrap">
-      <div class="back"></div>
-    </div>
-    <div class="fold-wrap">
-      <div class="fold-shader"></div>
-    </div>
-    <div class="back-wrap">
-      <div class="back"></div>
-    </div>
-    <div class="fold-wrap">
-      <div class="fold-shader"></div>
+      <div class="white-wrap">
+        <div class="white"></div>
+      </div>
+      <div class="fold-wrap">
+        <div class="fold-shader"></div>
+      </div>
     </div>
     <div class="back-wrap">
-      <div class="back"></div>
-    </div>
-    <div class="fold-wrap">
-      <div class="fold-shader"></div>
-    </div>
-    <div class="back-wrap">
-      <div class="back"></div>
-    </div>
-    <div class="fold-wrap">
-      <div class="fold-shader"></div>
+      <div class="white-wrap">
+        <div class="white"></div>
+      </div>
+      <div class="fold-wrap">
+        <div class="fold-shader"></div>
+      </div>
     </div>
     <div class="back-wrap">
-      <div class="back"></div>
-    </div>
-    <div class="fold-wrap">
-      <div class="fold-shader"></div>
+      <div class="white-wrap">
+        <div class="white"></div>
+      </div>
+      <div class="fold-wrap">
+        <div class="fold-shader"></div>
+      </div>
     </div>
     <div class="back-wrap">
-      <div class="back"></div>
+      <div class="white-wrap">
+        <div class="white"></div>
+      </div>
+      <div class="fold-wrap">
+        <div class="fold-shader"></div>
+      </div>
     </div>
-    <div class="fold-wrap">
-      <div class="fold-shader"></div>
+    <div class="back-wrap">
+      <div class="white-wrap">
+        <div class="white"></div>
+      </div>
+      <div class="fold-wrap">
+        <div class="fold-shader"></div>
+      </div>
+    </div>
+    <div class="back-wrap">
+      <div class="white-wrap">
+        <div class="white"></div>
+      </div>
+      <div class="fold-wrap">
+        <div class="fold-shader"></div>
+      </div>
     </div>
     
   </div>
