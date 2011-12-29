@@ -46,7 +46,7 @@ h1 {
   box-shadow: 0 0 50px rgba(0,0,0,0.65);
   border: 10px solid #333;
   -webkit-transform-style: flat;
-  -webkit-perspective: 100;
+  -webkit-perspective: 750px;
 }
 
 .pages>.page-wrap {
@@ -57,7 +57,7 @@ h1 {
   top: -250%;
   overflow: hidden;
   -webkit-transform: rotate(-25deg) translate3d(0,0,0);
-  -webkit-transform-origin: 100% 25%;
+  -webkit-transform-origin: 100% 25% 0;
   -webkit-transition: -webkit-transform 1s ease-out 0;
 }
 
@@ -76,12 +76,12 @@ h1 {
   overflow: hidden;
   
   -webkit-transform: rotate(25deg) translate3d(0,0,0);
-  -webkit-transform-origin: 100% 0;
+  -webkit-transform-origin: 100% 0 0;
   -webkit-transition: -webkit-transform 1s ease-out 0;
 }
 
 .pages>.page-wrap.turned>.page {
-  -webkit-transform: rotate(0) translate(100%, 0);
+  -webkit-transform: rotate(0) translate3d(100%,0,0);
 }
 
 .pages>.page-wrap>.page>.page-contentwrap {
@@ -102,7 +102,7 @@ h1 {
   top: -50%;
   overflow: hidden;
 
-  -webkit-transform-origin: 100% 25%;
+  -webkit-transform-origin: 100% 25% 0;
   -webkit-transform: rotate(-25deg) translate3d(0,0,0);
   -webkit-transition: -webkit-transform 1s ease-out 0,
     -webkit-transform-origin 1s ease-out 0;
@@ -110,7 +110,7 @@ h1 {
 
 .pages>.back-wrap.turned {
   -webkit-transform: rotate(0) translate3d(-100%,0,0);
-  -webkit-transform-origin: 0 25%;
+  -webkit-transform-origin: 0 25% 0;
 }
 
 .pages>.back-wrap>.back {
@@ -127,7 +127,7 @@ h1 {
     opacity 500ms ease-out 750ms;
 
   -webkit-transform: rotate(-25deg) translate3d(100%,0,0);
-  -webkit-transform-origin: 100% 0;
+  -webkit-transform-origin: 100% 0 0;
 }
 
 .pages>.back-wrap.reverse-transition>.back {
@@ -162,7 +162,7 @@ h1 {
 
   -webkit-transition: -webkit-transform 1s ease-out 0,
     opacity 500ms ease-out 750ms;
-  -webkit-transform-origin: 50% 0;
+  -webkit-transform-origin: 50% 0 0;
   -webkit-transform:  translate3d(0,0,0) rotate(-25deg) scaleX(0.05);
 }
 
