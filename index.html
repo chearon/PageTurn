@@ -278,6 +278,7 @@ var Page = function(pageWrapEl, previous) {
       $(this.el).removeClass('reverse-transition');
       setTimeout(function() {
         $(this.el).addClass('turned')
+          .addClass('complete')
           .one('webkitTransitionEnd', hide);
       }.bind(this), 0);
     }
@@ -309,6 +310,7 @@ var Page = function(pageWrapEl, previous) {
       $(this.previous.el).addClass('reverse-transition');
       setTimeout(function() {
         $(this.previous.el).removeClass('turned')
+          .addClass('complete')
           .one('webkitTransitionEnd', hide);
       }.bind(this), 0);
     }
