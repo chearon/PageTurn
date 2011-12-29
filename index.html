@@ -56,14 +56,15 @@ h1 {
   right: 0;
   top: -250%;
   overflow: hidden;
-  display: none; /* overridden by .current */
+  display: none; /* overridden by .animating */
 
   -webkit-transform: rotate3d(0,0,1,-15deg) translate3d(0,0,0);
   -webkit-transform-origin: 100% 25% 0;
   -webkit-transition: -webkit-transform 1s ease-out 0;
 }
 
-.pages>.page-wrap.current { display: block; }
+.pages>.page-wrap.current,
+.pages>.page-wrap.animating { display: block; }
 
 .pages>.page-wrap.turned {
   -webkit-transform:  translate3d(-50%,0,0);
@@ -105,7 +106,7 @@ h1 {
   right: 0;
   top: -50%;
   overflow: hidden;
-  display: none; /* overridden by .current */
+  display: none; /* overridden by .animating */
 
   -webkit-transform-origin: 100% 25% 0;
   -webkit-transform: rotate3d(0,0,1,-15deg) translate3d(0,0,0);
@@ -113,7 +114,7 @@ h1 {
     -webkit-transform-origin 1s ease-out 0;
 }
 
-.pages>.back-wrap.current { display: block; }
+.pages>.back-wrap.animating { display: block; }
 
 .pages>.back-wrap.turned {
   -webkit-transform: rotate3d(0,0,1,0) translate3d(-100%,0,0);
@@ -155,10 +156,10 @@ h1 {
   height: 100%;
   right: 0;
   top: 0;
-  display: none; /* overridden by .current */
+  display: none; /* overridden by .animating */
 }
 
-.pages>.fold-wrap.current { display: block; }
+.pages>.fold-wrap.animating { display: block; }
 
 .pages>.fold-wrap>.fold-shader {
   width: 2%;
@@ -283,13 +284,14 @@ var Page = function(pageWrapEl, previous) {
    * @returns Page next
    */
   this.turn = function() {
-    var setNotCurrent = this.setNotCurrent.bind(this);
     if (this.next) {
-      this.next.setCurrent().unbind();
-      $(this.el).removeClass('reverse-transition');
+      this.setNotCurrent().next.setCurrent().unbind();
+      $(this.el).removeClass('reverse-transition').addClass('animating');
       setTimeout(function() {
         $(this.el).addClass('turned')
-          .one('webkitTransitionEnd', setNotCurrent);
+          .one('webkitTransitionEnd', function() {
+            $(this).removeClass('animating');
+          });
       }.bind(this), 0);
     }
     return (this.next || this);
@@ -314,13 +316,16 @@ var Page = function(pageWrapEl, previous) {
    * @returns Page previous
    */
   this.turnBackward = function() {
-    var setNotCurrent = this.setNotCurrent.bind(this);
     if (this.previous) {
-      this.previous.setCurrent().unbind();
-      $(this.previous.el).addClass('reverse-transition');
+      var thispage = $(this.el).addClass('animating');
+      this.setNotCurrent().previous.setCurrent().unbind();
+      $(this.previous.el).addClass('animating reverse-transition');
       setTimeout(function() {
         $(this.previous.el).removeClass('turned')
-          .one('webkitTransitionEnd', setNotCurrent);
+          .one('webkitTransitionEnd', function() {
+            $(this).removeClass('animating');
+            thispage.removeClass('animating');
+          });
       }.bind(this), 0);
     }
     return (this.previous || this);
