@@ -56,13 +56,13 @@ h1 {
   right: 0;
   top: -250%;
   overflow: hidden;
-  -webkit-transform: rotate(-25deg) translate3d(0,0,0);
+  -webkit-transform: rotate3d(0,0,1,-25deg) translate3d(0,0,0);
   -webkit-transform-origin: 100% 25% 0;
   -webkit-transition: -webkit-transform 1s ease-out 0;
 }
 
 .pages>.page-wrap.turned {
-  -webkit-transform: rotate(0) translate3d(-50%,0,0);
+  -webkit-transform:  translate3d(-50%,0,0);
 }
 
 .pages>.page-wrap>.page {
@@ -75,13 +75,13 @@ h1 {
   height: 10%;
   overflow: hidden;
   
-  -webkit-transform: rotate(25deg) translate3d(0,0,0);
+  -webkit-transform: rotate3d(0,0,1,25deg) translate3d(0,0,0);
   -webkit-transform-origin: 100% 0 0;
   -webkit-transition: -webkit-transform 1s ease-out 0;
 }
 
 .pages>.page-wrap.turned>.page {
-  -webkit-transform: rotate(0) translate3d(100%,0,0);
+  -webkit-transform: rotate3d(0,0,1,0) translate3d(100%,0,0);
 }
 
 .pages>.page-wrap>.page>.page-contentwrap {
@@ -103,13 +103,13 @@ h1 {
   overflow: hidden;
 
   -webkit-transform-origin: 100% 25% 0;
-  -webkit-transform: rotate(-25deg) translate3d(0,0,0);
+  -webkit-transform: rotate3d(0,0,1,-25deg) translate3d(0,0,0);
   -webkit-transition: -webkit-transform 1s ease-out 0,
     -webkit-transform-origin 1s ease-out 0;
 }
 
 .pages>.back-wrap.turned {
-  -webkit-transform: rotate(0) translate3d(-100%,0,0);
+  -webkit-transform: rotate3d(0,0,1,0) translate3d(-100%,0,0);
   -webkit-transform-origin: 0 25% 0;
 }
 
@@ -126,7 +126,7 @@ h1 {
   -webkit-transition: -webkit-transform 1s ease-out 0,
     opacity 500ms ease-out 750ms;
 
-  -webkit-transform: rotate(-25deg) translate3d(100%,0,0);
+  -webkit-transform: rotate3d(0,0,1,-25deg) translate3d(100%,0,0);
   -webkit-transform-origin: 100% 0 0;
 }
 
@@ -136,7 +136,7 @@ h1 {
 }
 
 .pages>.back-wrap.turned>.back {
-  -webkit-transform: rotate(0) translate3d(0,0,0);
+  -webkit-transform: rotate3d(0,0,1,0) translate3d(0,0,0);
   opacity: 0;
 }
 
@@ -163,7 +163,7 @@ h1 {
   -webkit-transition: -webkit-transform 1s ease-out 0,
     opacity 500ms ease-out 750ms;
   -webkit-transform-origin: 50% 0 0;
-  -webkit-transform:  translate3d(0,0,0) rotate(-25deg) scaleX(0.05);
+  -webkit-transform:  translate3d(0,0,0) rotate3d(0,0,1,-25deg) scaleX(0.05);
 }
 
 .pages>.fold-wrap.reverse-transition>.fold-shader {
@@ -173,7 +173,7 @@ h1 {
 
 .pages>.fold-wrap.turned>.fold-shader {
   opacity: 0;
-  -webkit-transform:  translate3d(-5000%,0,0) rotate(0) scaleX(10);
+  -webkit-transform: translate3d(-5000%,0,0) rotate3d(0,0,1,0) scaleX(10);
 }
 
 .btn {
