@@ -262,7 +262,7 @@ var Page = function(pageWrapEl, previous) {
    * @returns Page this
    */
   this.donthide = function() {
-    $(this.el).unbind('webkitTransitionEnd')
+    $(this.el).unbind('webkitTransitionEnd');
     return this;
   };
 
