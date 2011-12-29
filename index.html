@@ -257,6 +257,16 @@ var Page = function(pageWrapEl, previous) {
   };
 
   /**
+   * Removes the transitionEnd event that will hide
+   * this page on complete
+   * @returns Page this
+   */
+  this.donthide = function() {
+    $(this.el).unbind('webkitTransitionEnd')
+    return this;
+  };
+
+  /**
    * Turn the page off of the screen to reveal the one below,
    * and return the one below.
    * @returns Page next
@@ -264,9 +274,10 @@ var Page = function(pageWrapEl, previous) {
   this.turn = function() {
     var hide = this.hide.bind(this);
     if (this.next) {
-      this.next.show();
+      this.next.show().donthide();
       $(this.el).removeClass('reverse-transition');
       setTimeout(function() {
+
         $(this.el).addClass('turned')
           .one('webkitTransitionEnd', hide);
       }.bind(this), 0);
@@ -295,10 +306,10 @@ var Page = function(pageWrapEl, previous) {
   this.turnBackward = function() {
     var hide = this.hide.bind(this);
     if (this.previous) {
-      this.previous.show();
+      this.previous.show().donthide();
       $(this.previous.el).addClass('reverse-transition');
       setTimeout(function() {
-        $(this.previous.el).removeClass('turned')
+        $(this.previous.el).removeClass('turned').unbind('reverse-transition')
           .one('webkitTransitionEnd', hide);
       }.bind(this), 0);
     }
