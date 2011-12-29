@@ -407,6 +407,18 @@ $('#prev').bind('click', function() {
   flipper.previous();
 });
 
+$(document).bind('keydown', function(key) {
+  switch(key.keyCode) {
+    case 39:
+      flipper.next();
+    break;
+
+    case 37:
+      flipper.previous();
+    break;
+  }
+});
+
 }); // jQuery
 </script>
 </head>
