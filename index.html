@@ -261,7 +261,7 @@ var Page = function(pageWrapEl, previous) {
    * this page on complete
    * @returns Page this
    */
-  this.donthide = function() {
+  this.unbind = function() {
     $(this.el).unbind('webkitTransitionEnd');
     return this;
   };
@@ -274,7 +274,7 @@ var Page = function(pageWrapEl, previous) {
   this.turn = function() {
     var hide = this.hide.bind(this);
     if (this.next) {
-      this.next.show().donthide();
+      this.next.show().unbind();
       $(this.el).removeClass('reverse-transition');
       setTimeout(function() {
         $(this.el).addClass('turned')
@@ -306,7 +306,7 @@ var Page = function(pageWrapEl, previous) {
   this.turnBackward = function() {
     var hide = this.hide.bind(this);
     if (this.previous) {
-      this.previous.show().donthide();
+      this.previous.show().unbind();
       $(this.previous.el).addClass('reverse-transition');
       setTimeout(function() {
         $(this.previous.el).removeClass('turned')
