@@ -1,574 +1,563 @@
 <!DOCTYPE html>
 <html>
-<head>
-<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-<style type="text/css">
-@font-face {
-  src: url('fonts/Classica.ttf');
-  font-family: Classica;
-}
-
-.current:not(.animating), .current:not(.animating) > .page { -webkit-transition: none !important; -webkit-transform: none !important; }
-
-html, body {
-  background: -webkit-gradient(linear, left top, right bottom, from(#CCC), to(#FFF));
-  font-family: sans-serif;
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
-}
-
-p {
-  font-family: Georgia;
-  text-indent: 20px;
-}
-
-h1 {
-  font-family: Classica;
-  color: #006;
-  border-bottom: 1px dashed #000;
-}
-
-#container {
-  overflow: hidden;
-  height: 700px;
-  left: 0;
-  top: 0;
-  padding: 20px;
-}
-
-#container>.pages {
-  width: 960px;
-  height: 600px;
-  position: relative;
-  overflow: visible;
-  margin: 0 auto;
-  border-radius: 3px;
-  box-shadow: 0 0 50px rgba(0,0,0,0.65);
-  border: 10px solid #333;
-  -webkit-transform-style: flat;
-  -webkit-perspective: 750px;
-}
-
-.pages>.page-wrap {
-  position: absolute;
-  width: 200%;
-  height: 1000%;
-  right: 0;
-  top: -250%;
-  overflow: hidden;
-  display: none; /* overridden by .animating */
-
-  -webkit-transform: rotate3d(0,0,1,-15deg) translate3d(0,0,0);
-  -webkit-transform-origin: 100% 25% 0;
-  -webkit-transition: -webkit-transform 1s ease-out 0;
-}
-
-.pages>.page-wrap.current,
-.pages>.page-wrap.animating { display: block; }
-
-.pages>.page-wrap.turned {
-  -webkit-transform:  translate3d(-50%,0,0);
-}
-
-.pages>.page-wrap>.page {
-  background: -webkit-gradient(linear, left top, right top,
-    color-stop(0, #CCC), color-stop(10%, #FFF));
-  position: absolute;
-  right: 0;
-  top: 25%;
-  width: 50%;
-  height: 10%;
-  overflow: hidden;
-  
-  -webkit-transform: rotate3d(0,0,1,15deg) translate3d(0,0,0);
-  -webkit-transform-origin: 100% 0 0;
-  -webkit-transition: -webkit-transform 1s ease-out 0;
-}
-
-.pages>.page-wrap.turned>.page {
-  -webkit-transform: rotate3d(0,0,1,0) translate3d(100%,0,0);
-}
-
-.pages>.page-wrap>.page>.page-contentwrap {
-  left: 0;
-  top: 0;
-  padding: 5% 10%;
-  position: absolute;
-  height: 100%;
-  overflow: scroll;
-  overflow-x: hidden;
-}
-
-.pages>.back-wrap>.white-wrap {
-  position: absolute;
-  width: 100%;
-  height: 200%;
-  right: 0;
-  top: -50%;
-  overflow: hidden;
-  display: none; /* overridden by .animating */
-
-  -webkit-transform-origin: 100% 25% 0;
-  -webkit-transform: rotate3d(0,0,1,-15deg) translate3d(0,0,0);
-  -webkit-transition: -webkit-transform 1s ease-out 0,
-    -webkit-transform-origin 1s ease-out 0;
-}
-
-.pages>.back-wrap.animating>.white-wrap { display: block; }
-
-.pages>.back-wrap.turned>.white-wrap {
-  -webkit-transform: rotate3d(0,0,1,0) translate3d(-100%,0,0);
-  -webkit-transform-origin: 0 25% 0;
-}
-
-.pages>.back-wrap>.white-wrap>.white {
-  z-index: 10;
-  width: 100%;
-  height: 50%;
-  top: 25%;
-  right: 0;
-  background-color: white;
-  position: absolute;
-  opacity: 1;
-  box-shadow: 0 0 50px rgba(0,0,0,0.5);
-  -webkit-transition: -webkit-transform 1s ease-out 0,
-    opacity 500ms ease-out 750ms;
-
-  -webkit-transform: rotate3d(0,0,1,-15deg) translate3d(100%,0,0);
-  -webkit-transform-origin: 100% 0 0;
-}
-
-.pages>.back-wrap.reverse-transition>.white-wrap>.white {
-  -webkit-transition: -webkit-transform 1s ease-out 0,
-    opacity 0 ease-out 0;
-}
-
-.pages>.back-wrap.turned>.white-wrap>.white {
-  -webkit-transform: rotate3d(0,0,1,0) translate3d(0,0,0);
-  opacity: 0;
-}
-
-.pages>.back-wrap>.fold-wrap {
-  position: absolute;
-  overflow: hidden;
-  overflow-y: visible;
-  width: 100%;
-  height: 100%;
-  right: 0;
-  top: 0;
-  display: none; /* overridden by .animating */
-}
-
-.pages>.back-wrap.animating>.fold-wrap { display: block; }
-
-.pages>.back-wrap>.fold-wrap>.fold-shader {
-  width: 2%;
-  right: -1%;
-  height: 100%;
-  top: 0;
-  background: -webkit-gradient(linear, left top, right top, 
-    color-stop(0%, rgba(0,0,0,0)), 
-    color-stop(50%, rgba(0,0,0,0.3)),
-    color-stop(100%, rgba(0,0,0,0)));
-  position: absolute;
-
-  -webkit-transition: -webkit-transform 1s ease-out 0,
-    opacity 500ms ease-out 750ms;
-  -webkit-transform-origin: 50% 0 0;
-  -webkit-transform:  translate3d(0,0,0) rotate3d(0,0,1,-15deg) scale3d(0.05, 1, 1);
-}
-
-.pages>.back-wrap.reverse-transition>.fold-wrap>.fold-shader {
-  -webkit-transition: -webkit-transform 1s ease-out 0,
-    opacity 0 ease-out 0;
-}
-
-.pages>.back-wrap.turned>.fold-wrap>.fold-shader {
-  opacity: 0;
-  -webkit-transform: translate3d(-5000%,0,0) rotate3d(0,0,1,0) scale3d(10, 1, 1);
-}
-
-.btn {
-  position: relative;
-  bottom: 50px;
-  display: inline;
-  width: auto;
-  height: auto;
-  background-color: #026;
-  color: #FFF;
-  font-family: Classica;
-  font-size: 1.3em;
-  margin: 10px;
-  padding: 10px;
-  cursor: pointer;
-  border-radius: 15px;
-  z-index: 1;
-  -webkit-user-select: none;
-}
-
-</style>
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-<script>
-if (!Function.prototype.bind) {
-  /** 
-   * Stolen from MDN: /JavaScript/Reference/Global_Objects/Function/bind
-   * @ignore
-   */
-  Function.prototype.bind = function (oThis) {
-    if (typeof this !== "function") {
-      // closest thing possible to the ECMAScript 5 internal IsCallable function
-      throw new TypeError("Function.prototype.bind - what is trying to be bound is not callable");
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <style type="text/css">
+    @font-face {
+      src: url('fonts/Classica.ttf');
+      font-family: Classica;
     }
 
-    var aArgs = Array.prototype.slice.call(arguments, 1), 
-      fToBind = this, 
-      fNOP = function () {},
-      fBound = function () {
-        return fToBind.apply(this instanceof fNOP ? this : oThis || window,
-          aArgs.concat(Array.prototype.slice.call(arguments)));
+    .current:not(.animating), .current:not(.animating) > .page { -webkit-transition: none !important; -webkit-transform: none !important; }
+
+    html, body {
+      background: -webkit-gradient(linear, left top, right bottom, from(#CCC), to(#FFF));
+      font-family: sans-serif;
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    p {
+      font-family: Georgia;
+      text-indent: 20px;
+    }
+
+    h1 {
+      font-family: Classica;
+      color: #006;
+      border-bottom: 1px dashed #000;
+    }
+
+    #container {
+      overflow: hidden;
+      height: 800px;
+      left: 0;
+      top: 0;
+      padding: 20px;
+    }
+
+    #container>.pages {
+      width: 800px;
+      height: 600px;
+      position: relative;
+      overflow: visible;
+      margin: 0 auto;
+      border-radius: 3px;
+      box-shadow: 0 0 50px rgba(0,0,0,0.65);
+      border: 10px solid #333;
+      -webkit-transform-style: flat;
+      -webkit-perspective: 750px;
+    }
+
+    .pages>.page-wrap {
+      position: absolute;
+      width: 200%;
+      height: 1000%;
+      right: 0;
+      top: -250%;
+      overflow: hidden;
+      display: none; /* overridden by .animating */
+
+      -webkit-transform: rotate3d(0,0,1,-15deg) translate3d(0,0,0);
+      -webkit-transform-origin: 100% 25% 0;
+      -webkit-transition: -webkit-transform 1s ease-out 0;
+    }
+
+    .pages>.page-wrap.current,
+    .pages>.page-wrap.animating { display: block; }
+
+    .pages>.page-wrap.turned {
+      -webkit-transform:  translate3d(-50%,0,0);
+    }
+
+    .pages>.page-wrap>.page {
+      background: -webkit-gradient(linear, left top, right top,
+        color-stop(0, #CCC), color-stop(10%, #FFF));
+      position: absolute;
+      right: 0;
+      top: 25%;
+      width: 50%;
+      height: 10%;
+      overflow: hidden;
+      
+      -webkit-transform: rotate3d(0,0,1,15deg) translate3d(0,0,0);
+      -webkit-transform-origin: 100% 0 0;
+      -webkit-transition: -webkit-transform 1s ease-out 0;
+    }
+
+    .pages>.page-wrap.turned>.page {
+      -webkit-transform: rotate3d(0,0,1,0) translate3d(100%,0,0);
+    }
+
+    .pages>.page-wrap>.page>.page-contentwrap {
+      left: 0;
+      top: 0;
+      padding: 5% 10%;
+      position: absolute;
+      height: 100%;
+      overflow: scroll;
+      overflow-x: hidden;
+    }
+
+    .pages>.back-wrap>.white-wrap {
+      position: absolute;
+      width: 100%;
+      height: 200%;
+      right: 0;
+      top: -50%;
+      overflow: hidden;
+      display: none; /* overridden by .animating */
+
+      -webkit-transform-origin: 100% 25% 0;
+      -webkit-transform: rotate3d(0,0,1,-15deg) translate3d(0,0,0);
+      -webkit-transition: -webkit-transform 1s ease-out 0,
+        -webkit-transform-origin 1s ease-out 0;
+    }
+
+    .pages>.back-wrap.animating>.white-wrap { display: block; }
+
+    .pages>.back-wrap.turned>.white-wrap {
+      -webkit-transform: rotate3d(0,0,1,0) translate3d(-100%,0,0);
+      -webkit-transform-origin: 0 25% 0;
+    }
+
+    .pages>.back-wrap>.white-wrap>.white {
+      z-index: 10;
+      width: 100%;
+      height: 50%;
+      top: 25%;
+      right: 0;
+      background-color: white;
+      position: absolute;
+      opacity: 1;
+      box-shadow: 0 0 50px rgba(0,0,0,0.5);
+      -webkit-transition: -webkit-transform 1s ease-out 0,
+        opacity 500ms ease-out 750ms;
+
+      -webkit-transform: rotate3d(0,0,1,-15deg) translate3d(100%,0,0);
+      -webkit-transform-origin: 100% 0 0;
+    }
+
+    .pages>.back-wrap.reverse-transition>.white-wrap>.white {
+      -webkit-transition: -webkit-transform 1s ease-out 0,
+        opacity 0 ease-out 0;
+    }
+
+    .pages>.back-wrap.turned>.white-wrap>.white {
+      -webkit-transform: rotate3d(0,0,1,0) translate3d(0,0,0);
+      opacity: 0;
+    }
+
+    .pages>.back-wrap>.fold-wrap {
+      position: absolute;
+      overflow: hidden;
+      overflow-y: visible;
+      width: 100%;
+      height: 100%;
+      right: 0;
+      top: 0;
+      display: none; /* overridden by .animating */
+    }
+
+    .pages>.back-wrap.animating>.fold-wrap { display: block; }
+
+    .pages>.back-wrap>.fold-wrap>.fold-shader {
+      width: 2%;
+      right: -1%;
+      height: 100%;
+      top: 0;
+      background: -webkit-gradient(linear, left top, right top, 
+        color-stop(0%, rgba(0,0,0,0)), 
+        color-stop(50%, rgba(0,0,0,0.3)),
+        color-stop(100%, rgba(0,0,0,0)));
+      position: absolute;
+
+      -webkit-transition: -webkit-transform 1s ease-out 0,
+        opacity 500ms ease-out 750ms;
+      -webkit-transform-origin: 50% 0 0;
+      -webkit-transform:  translate3d(0,0,0) rotate3d(0,0,1,-15deg) scale3d(0.05, 1, 1);
+    }
+
+    .pages>.back-wrap.reverse-transition>.fold-wrap>.fold-shader {
+      -webkit-transition: -webkit-transform 1s ease-out 0,
+        opacity 0 ease-out 0;
+    }
+
+    .pages>.back-wrap.turned>.fold-wrap>.fold-shader {
+      opacity: 0;
+      -webkit-transform: translate3d(-5000%,0,0) rotate3d(0,0,1,0) scale3d(10, 1, 1);
+    }
+
+    button {
+      position: relative;
+      display: inline-block;
+      background-color: #026;
+      color: #fff;
+      font-family: Classica;
+      margin: 10px;
+      padding: 5px;
+      cursor: pointer;
+      border-radius: 7px;
+      z-index: 1;
+      border: 0;
+      -webkit-user-select: none;
+    }
+    
+    #buttons { text-align: center; margin-top: -175px; }
+    </style>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script>
+    if (!Function.prototype.bind) {
+      /** 
+       * Stolen from MDN: /JavaScript/Reference/Global_Objects/Function/bind
+       * @ignore
+       */
+      Function.prototype.bind = function (oThis) {
+        if (typeof this !== "function") {
+          // closest thing possible to the ECMAScript 5 internal IsCallable function
+          throw new TypeError("Function.prototype.bind - what is trying to be bound is not callable");
+        }
+
+        var aArgs = Array.prototype.slice.call(arguments, 1), 
+          fToBind = this, 
+          fNOP = function () {},
+          fBound = function () {
+            return fToBind.apply(this instanceof fNOP ? this : oThis || window,
+              aArgs.concat(Array.prototype.slice.call(arguments)));
+          };
+
+        fNOP.prototype = this.prototype;
+        fBound.prototype = new fNOP();
+
+        return fBound;
+      };
+    }
+    jQuery(function($) {
+
+    /**
+     *  Page object - node in a linked list.  Must be initialized with previous,
+     *  so you're expected to create these in a start-to-end fashion.  Calling
+     *  turn() and turnBackward() return the next and previous pages respectively
+     *  for nice chaining.
+     *  @constructor
+     */
+    var Page = function(pageWrapEl, previous) {
+      this.el = pageWrapEl;
+      this.previous = previous;
+      this.next = undefined;
+      
+      //  Set up the last page's next pointer, unless we're on the first page
+      if (previous) previous.next = this;
+      
+      /**
+       * Hide this page (as in CSS)
+       * @returns Page this
+       */
+      this.setNotCurrent = function() {
+        $(this.el).removeClass('current');
+        return this;
       };
 
-    fNOP.prototype = this.prototype;
-    fBound.prototype = new fNOP();
+      /**
+       * Show this page (as in CSS)
+       * @returns Page this
+       */
+      this.setCurrent = function() {
+        $(this.el).addClass('current');
+        return this;
+      };
 
-    return fBound;
-  };
-}
-jQuery(function($) {
+      /**
+       * Removes the transitionEnd event that will hide
+       * this page on complete
+       * @returns Page this
+       */
+      this.unbind = function() {
+        $(this.el).unbind('webkitTransitionEnd');
+        return this;
+      };
 
-/**
- *  Page object - node in a linked list.  Must be initialized with previous,
- *  so you're expected to create these in a start-to-end fashion.  Calling
- *  turn() and turnBackward() return the next and previous pages respectively
- *  for nice chaining.
- *  @constructor
- */
-var Page = function(pageWrapEl, previous) {
-  this.el = pageWrapEl;
-  this.previous = previous;
-  this.next = undefined;
-  
-  //  Set up the last page's next pointer, unless we're on the first page
-  if (previous) previous.next = this;
-  
-  /**
-   * Hide this page (as in CSS)
-   * @returns Page this
-   */
-  this.setNotCurrent = function() {
-    $(this.el).removeClass('current');
-    return this;
-  };
+      /**
+       * Turn the page off of the screen to reveal the one below,
+       * and return the one below.
+       * @returns Page next
+       */
+      this.turn = function() {
+        if (this.next) {
+          this.setNotCurrent().next.setCurrent().unbind();
+          $(this.el).removeClass('reverse-transition').addClass('animating');
+          setTimeout(function() {
+            $(this.el).addClass('turned')
+              .one('webkitTransitionEnd', function() {
+                $(this).removeClass('animating');
+              });
+          }.bind(this), 0);
+        }
+        return (this.next || this);
+      };
 
-  /**
-   * Show this page (as in CSS)
-   * @returns Page this
-   */
-  this.setCurrent = function() {
-    $(this.el).addClass('current');
-    return this;
-  };
+      /**
+       * Turn forward without animation
+       * @returns Page next
+       */
+      this.turnImmediate = function() {
+        if (this.next) {
+          this.setNotCurrent();
+          $(this.el).removeClass('reverse-transition').addClass('turned');
+          this.next.setCurrent();
+        }
+        return (this.next || this);
+      };
 
-  /**
-   * Removes the transitionEnd event that will hide
-   * this page on complete
-   * @returns Page this
-   */
-  this.unbind = function() {
-    $(this.el).unbind('webkitTransitionEnd');
-    return this;
-  };
+      /**
+       * Turn the page on the left back onto the screen, covering
+       * up this page and returning the new one on top.
+       * @returns Page previous
+       */
+      this.turnBackward = function() {
+        if (this.previous) {
+          var thispage = $(this.el).addClass('animating');
+          this.setNotCurrent().previous.setCurrent().unbind();
+          $(this.previous.el).addClass('animating reverse-transition');
+          setTimeout(function() {
+            $(this.previous.el).removeClass('turned')
+              .one('webkitTransitionEnd', function() {
+                $(this).removeClass('animating');
+                thispage.removeClass('animating');
+              });
+          }.bind(this), 0);
+        }
+        return (this.previous || this);
+      };
 
-  /**
-   * Turn the page off of the screen to reveal the one below,
-   * and return the one below.
-   * @returns Page next
-   */
-  this.turn = function() {
-    if (this.next) {
-      this.setNotCurrent().next.setCurrent().unbind();
-      $(this.el).removeClass('reverse-transition').addClass('animating');
-      setTimeout(function() {
-        $(this.el).addClass('turned')
-          .one('webkitTransitionEnd', function() {
-            $(this).removeClass('animating');
-          });
-      }.bind(this), 0);
+      /**
+       * Turn backward without animating
+       * @returns Page previous
+       */
+      this.turnBackwardImmediate = function() {
+        if (this.previous) {
+          this.setNotCurrent();
+          $(this.previous.el).addClass('reverse-transition').removeClass('turned');
+          this.previous.setCurrent();
+        }
+        return (this.previous || this);
+      };
+    };
+
+    function arrayToPages(array) {
+      var previous = undefined;
+      return array.map(function newPage(el) { 
+        return (previous = new Page(el, previous));
+      });
     }
-    return (this.next || this);
-  };
 
-  /**
-   * Turn forward without animation
-   * @returns Page next
-   */
-  this.turnImmediate = function() {
-    if (this.next) {
-      this.setNotCurrent();
-      $(this.el).removeClass('reverse-transition').addClass('turned');
-      this.next.setCurrent();
-    }
-    return (this.next || this);
-  };
+    /**
+     * Holds the linked list of {@link Page}s - keeps track of current page
+     * @constructor
+     */
+    var PageFlipper = function($pages) {
+      // __init__
+      this.pages = arrayToPages($pages.find('.page-wrap').toArray().reverse());
+      this.backs = arrayToPages($pages.find('.back-wrap').toArray());
 
-  /**
-   * Turn the page on the left back onto the screen, covering
-   * up this page and returning the new one on top.
-   * @returns Page previous
-   */
-  this.turnBackward = function() {
-    if (this.previous) {
-      var thispage = $(this.el).addClass('animating');
-      this.setNotCurrent().previous.setCurrent().unbind();
-      $(this.previous.el).addClass('animating reverse-transition');
-      setTimeout(function() {
-        $(this.previous.el).removeClass('turned')
-          .one('webkitTransitionEnd', function() {
-            $(this).removeClass('animating');
-            thispage.removeClass('animating');
-          });
-      }.bind(this), 0);
-    }
-    return (this.previous || this);
-  };
+      this.currentPage = this.pages[0];
+      this.currentBack = this.backs[0];
 
-  /**
-   * Turn backward without animating
-   * @returns Page previous
-   */
-  this.turnBackwardImmediate = function() {
-    if (this.previous) {
-      this.setNotCurrent();
-      $(this.previous.el).addClass('reverse-transition').removeClass('turned');
-      this.previous.setCurrent();
-    }
-    return (this.previous || this);
-  };
-};
+      if (this.currentPage) this.currentPage.setCurrent();
+      if (this.currentBack) this.currentBack.setCurrent();
 
-function arrayToPages(array) {
-  var previous = undefined;
-  return array.map(function newPage(el) { 
-    return (previous = new Page(el, previous));
-  });
-}
+      /**
+       * Turn the current page
+       * @returns PageFlipper this For chaining
+       */
+      this.next = function() {
+        this.currentPage = this.currentPage.turn();
+        this.currentBack = this.currentBack.turn();
+        return this;
+      };
 
-/**
- * Holds the linked list of {@link Page}s - keeps track of current page
- * @constructor
- */
-var PageFlipper = function($pages) {
-  // __init__
-  this.pages = arrayToPages($pages.find('.page-wrap').toArray().reverse());
-  this.backs = arrayToPages($pages.find('.back-wrap').toArray());
+      /**
+       * Turn the current page backwards
+       * @returns PageFlipper this For chaining
+       */
+      this.previous = function() {
+        this.currentPage = this.currentPage.turnBackward();
+        this.currentBack = this.currentBack.turnBackward();
+        return this;
+      };
 
-  this.currentPage = this.pages[0];
-  this.currentBack = this.backs[0];
+      /**
+       * Jump to a page without animation
+       * @param Integer index The page to jump to
+       * @returns PageFlipper this For chaining
+       */
+      this.jump = function(index) {
+        var i = (this.pages.indexOf(this.currentPage) || 0);
+        while (i < index) { 
+          this.currentPage = this.pages[i].turnImmediate(); 
+          this.currentBack = this.currentBack.turnImmediate();
+          ++i;
+        }
+        while (i > index) { 
+          this.currentPage = this.pages[i].turnBackwardImmediate();
+          this.currentBack = this.currentBack.turnBackwardImmediate();
+          --i; 
+        }
+      };
+    };
 
-  if (this.currentPage) this.currentPage.setCurrent();
-  if (this.currentBack) this.currentBack.setCurrent();
+    var flipper = new PageFlipper($('.pages'));
+    window.pf = flipper;
 
-  /**
-   * Turn the current page
-   * @returns PageFlipper this For chaining
-   */
-  this.next = function() {
-    this.currentPage = this.currentPage.turn();
-    this.currentBack = this.currentBack.turn();
-    return this;
-  };
-
-  /**
-   * Turn the current page backwards
-   * @returns PageFlipper this For chaining
-   */
-  this.previous = function() {
-    this.currentPage = this.currentPage.turnBackward();
-    this.currentBack = this.currentBack.turnBackward();
-    return this;
-  };
-
-  /**
-   * Jump to a page without animation
-   * @param Integer index The page to jump to
-   * @returns PageFlipper this For chaining
-   */
-  this.jump = function(index) {
-    var i = (this.pages.indexOf(this.currentPage) || 0);
-    while (i < index) { 
-      this.currentPage = this.pages[i].turnImmediate(); 
-      this.currentBack = this.currentBack.turnImmediate();
-      ++i;
-    }
-    while (i > index) { 
-      this.currentPage = this.pages[i].turnBackwardImmediate();
-      this.currentBack = this.currentBack.turnBackwardImmediate();
-      --i; 
-    }
-  };
-};
-
-var flipper = new PageFlipper($('.pages'));
-window.pf = flipper;
-
-$('#next').bind('click', function() {
-  flipper.next();
-});
-
-$('#flipback').bind('click', function() {
-  flipper.jump($('.pages > .page-wrap').length-1);
-});
-
-$('#flipfront').bind('click', function() {
-  flipper.jump(0);
-});
-
-$('#prev').bind('click', function() {
-  flipper.previous();
-});
-
-$(document).bind('keydown', function(key) {
-  switch(key.keyCode) {
-    case 39:
+    $('#next').bind('click', function() {
       flipper.next();
-    break;
+    });
 
-    case 37:
+    $('#flipback').bind('click', function() {
+      flipper.jump($('.pages > .page-wrap').length-1);
+    });
+
+    $('#flipfront').bind('click', function() {
+      flipper.jump(0);
+    });
+
+    $('#prev').bind('click', function() {
       flipper.previous();
-    break;
-  }
-});
+    });
 
-}); // jQuery
-</script>
-</head>
-<body>
-<div id="container">
-  <div class="pages">
+    $(document).bind('keydown', function(key) {
+      switch(key.keyCode) {
+        case 39:
+          flipper.next();
+        break;
 
-    <div class="page-wrap">
-      <div id="page6" class="page">
-        <div class="page-contentwrap">
-           <img src="images/end.jpg" style="width: 100%" /> 
-        </div>
-      </div>
-    </div>
-    
-    <div class="page-wrap">
-      <div id="page5" class="page">
-        <div class="page-contentwrap">
-          <h1>Monster</h1>
-           <img src="images/monster.jpg" style="width: 100%" /> 
-          <p><b>Monster Energy</b> is an <a href="/wiki/Energy_drink" title="Energy drink">energy drink</a> that was launched by <a href="/wiki/Hansen_Natural" title="Hansen Natural">Hansen Natural</a> in 2002.<sup id="cite_ref-0" class="reference"><a href="#cite_note-0"><span>[</span>1<span>]</span></a></sup></p>          
-          <p>Though it is not widely advertised in the media, Monster receives a large amount of recognition from its sponsorship of various sporting events, including motocross and car racing. Hansen Natural Corporation announced a distribution agreement with <a href="/wiki/Anheuser-Busch" title="Anheuser-Busch">Anheuser-Busch</a> in the <a href="/wiki/United_States" title="United States">U.S.</a><sup id="cite_ref-1" class="reference"><a href="#cite_note-1"><span>[</span>2<span>]</span></a></sup> and Grupo Jumex in <a href="/wiki/Mexico" title="Mexico">Mexico</a>.<sup id="cite_ref-2" class="reference"><a href="#cite_note-2"><span>[</span>3<span>]</span></a></sup> Hansen Natural Corporation announced a distribution deal with PepsiCo Canada in February of 2007. Contracts with existing distributors were bought out in these markets. In Germany <a href="/wiki/Pepsi" title="Pepsi">Pepsi</a> is the Producer and it is available there since summer/fall 2010. It is distributed in Australia by <a href="/wiki/Schweppes" title="Schweppes">Schweppes</a> as <a href="/wiki/Coca-Cola_Amatil" title="Coca-Cola Amatil">Coca-Cola Amatil</a>, which manufactures <a href="/wiki/Mother_(energy_drink)" title="Mother (energy drink)">Mother</a> energy drink, an exclusive energy drink sold only in Australia and New Zealand.</p>
-        </div>
-      </div>
-    </div>
+        case 37:
+          flipper.previous();
+        break;
+      }
+    });
 
-    <div class="page-wrap">
-      <div id="page4" class="page">
-        <div class="page-contentwrap">
-          <h1>Starbucks!</h1>
-            <p><b>Starbucks Corporation</b> (<a href="/wiki/NASDAQ" title="NASDAQ">NASDAQ</a>:&nbsp;<a rel="nofollow" class="external text" href="http://quotes.nasdaq.com/asp/SummaryQuote.asp?symbol=SBUX&amp;selected=SBUX">SBUX</a>) is an international coffee and <a href="/wiki/List_of_coffeehouse_chains" title="List of coffeehouse chains">coffeehouse chain</a> based in <a href="/wiki/Seattle" title="Seattle">Seattle</a>, Washington. Starbucks is the largest <a href="/wiki/Coffeehouse" title="Coffeehouse">coffeehouse</a> company in the world,<sup id="cite_ref-hoovers_1-1" class="reference"><a href="#cite_note-hoovers-1"><span>[</span>2<span>]</span></a></sup> with 17,009 stores in 55 countries, including over 11,000 in the United States, over 1,000 in Canada, over 700 in the United Kingdom, and over 150 in <a href="/wiki/Turkey" title="Turkey">Turkey</a>.<sup id="cite_ref-10K2010_0-6" class="reference"><a href="#cite_note-10K2010-0"><span>[</span>1<span>]</span></a></sup><sup id="cite_ref-factsheet_2-0" class="reference"><a href="#cite_note-factsheet-2"><span>[</span>3<span>]</span></a></sup></p>
-            <img src="images/coffee.jpg" />
+    }); // jQuery
+    </script>
+  </head>
+  <body>
+    <div id="container">
+      <div class="pages">
+        <div class="page-wrap">
+          <div id="page6" class="page">
+            <div class="page-contentwrap">
+               <img src="images/end.jpg" style="width: 100%" /> 
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+        
+        <div class="page-wrap">
+          <div id="page5" class="page">
+            <div class="page-contentwrap">
+              <h1>Monster</h1>
+               <img src="images/monster.jpg" style="width: 100%" /> 
+              <p><b>Monster Energy</b> is an <a href="/wiki/Energy_drink" title="Energy drink">energy drink</a> that was launched by <a href="/wiki/Hansen_Natural" title="Hansen Natural">Hansen Natural</a> in 2002.<sup id="cite_ref-0" class="reference"><a href="#cite_note-0"><span>[</span>1<span>]</span></a></sup></p>          
+              <p>Though it is not widely advertised in the media, Monster receives a large amount of recognition from its sponsorship of various sporting events, including motocross and car racing. Hansen Natural Corporation announced a distribution agreement with <a href="/wiki/Anheuser-Busch" title="Anheuser-Busch">Anheuser-Busch</a> in the <a href="/wiki/United_States" title="United States">U.S.</a><sup id="cite_ref-1" class="reference"><a href="#cite_note-1"><span>[</span>2<span>]</span></a></sup> and Grupo Jumex in <a href="/wiki/Mexico" title="Mexico">Mexico</a>.<sup id="cite_ref-2" class="reference"><a href="#cite_note-2"><span>[</span>3<span>]</span></a></sup> Hansen Natural Corporation announced a distribution deal with PepsiCo Canada in February of 2007. Contracts with existing distributors were bought out in these markets. In Germany <a href="/wiki/Pepsi" title="Pepsi">Pepsi</a> is the Producer and it is available there since summer/fall 2010. It is distributed in Australia by <a href="/wiki/Schweppes" title="Schweppes">Schweppes</a> as <a href="/wiki/Coca-Cola_Amatil" title="Coca-Cola Amatil">Coca-Cola Amatil</a>, which manufactures <a href="/wiki/Mother_(energy_drink)" title="Mother (energy drink)">Mother</a> energy drink, an exclusive energy drink sold only in Australia and New Zealand.</p>
+            </div>
+          </div>
+        </div>
 
-    <div class="page-wrap">
-      <div id="page3" class="page">
-        <div class="page-contentwrap">
-          <h1>Red Bull</h1>
-          <img src="images/redbull.jpg" />
-          <p><b>Red Bull</b> is an <a href="/wiki/Energy_drink" title="Energy drink">energy drink</a> sold by the <a href="/wiki/Austria" title="Austria">Austrian</a> <a href="/wiki/Red_Bull_GmbH" title="Red Bull GmbH">Red Bull GmbH</a>, created in 1987 by the Austrian entrepreneur Dietrich Mateschitz<sup id="cite_ref-0" class="reference"><a href="#cite_note-0"><span>[</span>1<span>]</span></a></sup>. In terms of market share, Red Bull is the most popular energy drink in the world, with 3 billion cans sold each year.<sup id="cite_ref-1" class="reference"><a href="#cite_note-1"><span>[</span>2<span>]</span></a></sup><sup id="cite_ref-2" class="reference"><a href="#cite_note-2"><span>[</span>3<span>]</span></a></sup> <a href="/wiki/Dietrich_Mateschitz" title="Dietrich Mateschitz">Dietrich Mateschitz</a> was inspired by an already existing drink called <a href="/wiki/Krating_Daeng" title="Krating Daeng">Krating Daeng</a> which he discovered in Thailand. He took this idea, and to suit the tastes of Westerners, modified the ingredients,<sup id="cite_ref-3" class="reference"><a href="#cite_note-3"><span>[</span>4<span>]</span></a></sup> and founded <a href="/wiki/Austria" title="Austria">Austrian</a> <a href="/wiki/Red_Bull_GmbH" title="Red Bull GmbH">Red Bull GmbH</a> in partnership with <a href="/wiki/Chaleo_Yoovidhya" title="Chaleo Yoovidhya">Chaleo Yoovidhya</a>. <a href="/wiki/Chaleo_Yoovidhya" title="Chaleo Yoovidhya">Chaleo Yoovidhya</a> invented the <a href="/wiki/Thailand" title="Thailand">Thai</a> energy drink <a href="/wiki/Krating_Daeng" title="Krating Daeng">Krating Daeng</a>; in <a href="/wiki/Thai_language" title="Thai language">Thai</a> <i>daeng</i> is red, and <i>krating</i> is the reddish brown <a href="/wiki/Bovine" title="Bovine" class="mw-redirect">bovine</a>, <a href="/wiki/Gaur" title="Gaur">gaur</a>, an animal slightly larger than the <a href="/wiki/Bison" title="Bison">bison</a>. Red Bull is sold in a tall and slim blue-silver can. <a href="/wiki/Krating_Daeng" title="Krating Daeng">Krating Daeng</a> is sold in <a href="/wiki/Thailand" title="Thailand">Thailand</a> and in some parts of <a href="/wiki/Asia" title="Asia">Asia</a> in a wider gold can with the name of <a href="/wiki/Krating_Daeng" title="Krating Daeng">Krating Daeng</a> or Red Bull Classic.<sup id="cite_ref-4" class="reference"><a href="#cite_note-4"><span>[</span>5<span>]</span></a></sup> Both are different products produced separately.</p>
+        <div class="page-wrap">
+          <div id="page4" class="page">
+            <div class="page-contentwrap">
+              <h1>Starbucks!</h1>
+                <p><b>Starbucks Corporation</b> (<a href="/wiki/NASDAQ" title="NASDAQ">NASDAQ</a>:&nbsp;<a rel="nofollow" class="external text" href="http://quotes.nasdaq.com/asp/SummaryQuote.asp?symbol=SBUX&amp;selected=SBUX">SBUX</a>) is an international coffee and <a href="/wiki/List_of_coffeehouse_chains" title="List of coffeehouse chains">coffeehouse chain</a> based in <a href="/wiki/Seattle" title="Seattle">Seattle</a>, Washington. Starbucks is the largest <a href="/wiki/Coffeehouse" title="Coffeehouse">coffeehouse</a> company in the world,<sup id="cite_ref-hoovers_1-1" class="reference"><a href="#cite_note-hoovers-1"><span>[</span>2<span>]</span></a></sup> with 17,009 stores in 55 countries, including over 11,000 in the United States, over 1,000 in Canada, over 700 in the United Kingdom, and over 150 in <a href="/wiki/Turkey" title="Turkey">Turkey</a>.<sup id="cite_ref-10K2010_0-6" class="reference"><a href="#cite_note-10K2010-0"><span>[</span>1<span>]</span></a></sup><sup id="cite_ref-factsheet_2-0" class="reference"><a href="#cite_note-factsheet-2"><span>[</span>3<span>]</span></a></sup></p>
+                <img src="images/coffee.jpg" />
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-    
-    <div class="page-wrap">
-      <div id="page2" class="page">
-        <div class="page-contentwrap">
-          <h1>Caffeine</h1>
-          <img src="images/caffeine.svg" style="width: 80%" />
-          <p><b>Caffeine</b> is a bitter, white <a href="/wiki/Crystalline" title="Crystalline" class="mw-redirect">crystalline</a> <a href="/wiki/Xanthine" title="Xanthine">xanthine</a> <a href="/wiki/Alkaloid" title="Alkaloid">alkaloid</a> that acts as a <a href="/wiki/Stimulant" title="Stimulant">stimulant</a> drug. Caffeine is found in varying quantities in the seeds, leaves, and fruit of some plants, where it acts as a natural pesticide that paralyzes and kills certain insects feeding on the plants. It is most commonly consumed by humans in infusions extracted from the bean of the <a href="/wiki/Coffea_arabica" title="Coffea arabica">coffee plant</a> and the leaves of the <a href="/wiki/Camellia_sinensis" title="Camellia sinensis">tea bush</a>, as well as from various foods and drinks containing products derived from the <a href="/wiki/Kola_nut" title="Kola nut">kola nut</a>. Other sources include <a href="/wiki/Yerba_mat%C3%A9" title="Yerba maté">yerba maté</a>, <a href="/wiki/Guarana" title="Guarana">guarana</a> berries, <a href="/wiki/Ilex_guayusa" title="Ilex guayusa">guayusa</a>, and the <a href="/wiki/Ilex_vomitoria" title="Ilex vomitoria">yaupon holly</a>.</p>
-        </div>
-      </div>
-    </div>
-    
-    <div class="page-wrap">
-      <div id="page1" class="page">
-        <div class="page-contentwrap">
-          <h1>Ways to Get Caffeine</h1>
-          <img src="images/me.jpg" style="width: 100%" />
-        </div>
-      </div>
-    </div>
-    
-    <div class="back-wrap">
-      <div class="white-wrap">
-        <div class="white"></div>
-      </div>
-      <div class="fold-wrap">
-        <div class="fold-shader"></div>
-      </div>
-    </div>
-    <div class="back-wrap">
-      <div class="white-wrap">
-        <div class="white"></div>
-      </div>
-      <div class="fold-wrap">
-        <div class="fold-shader"></div>
-      </div>
-    </div>
-    <div class="back-wrap">
-      <div class="white-wrap">
-        <div class="white"></div>
-      </div>
-      <div class="fold-wrap">
-        <div class="fold-shader"></div>
-      </div>
-    </div>
-    <div class="back-wrap">
-      <div class="white-wrap">
-        <div class="white"></div>
-      </div>
-      <div class="fold-wrap">
-        <div class="fold-shader"></div>
-      </div>
-    </div>
-    <div class="back-wrap">
-      <div class="white-wrap">
-        <div class="white"></div>
-      </div>
-      <div class="fold-wrap">
-        <div class="fold-shader"></div>
-      </div>
-    </div>
-    <div class="back-wrap">
-      <div class="white-wrap">
-        <div class="white"></div>
-      </div>
-      <div class="fold-wrap">
-        <div class="fold-shader"></div>
-      </div>
-    </div>
-    
-  </div>
 
-</div>
-<div id="prev" class="btn">
-  Previous Page
-</div>
-<div id="flipfront" class="btn">
-  Flip to front efficiently
-</div>
-<div id="flipback" class="btn">
-  Flip to back efficiently
-</div>
-<div id="next" class="btn">
-  Next Page
-</div>
-</body>
+        <div class="page-wrap">
+          <div id="page3" class="page">
+            <div class="page-contentwrap">
+              <h1>Red Bull</h1>
+              <img src="images/redbull.jpg" />
+              <p><b>Red Bull</b> is an <a href="/wiki/Energy_drink" title="Energy drink">energy drink</a> sold by the <a href="/wiki/Austria" title="Austria">Austrian</a> <a href="/wiki/Red_Bull_GmbH" title="Red Bull GmbH">Red Bull GmbH</a>, created in 1987 by the Austrian entrepreneur Dietrich Mateschitz<sup id="cite_ref-0" class="reference"><a href="#cite_note-0"><span>[</span>1<span>]</span></a></sup>. In terms of market share, Red Bull is the most popular energy drink in the world, with 3 billion cans sold each year.<sup id="cite_ref-1" class="reference"><a href="#cite_note-1"><span>[</span>2<span>]</span></a></sup><sup id="cite_ref-2" class="reference"><a href="#cite_note-2"><span>[</span>3<span>]</span></a></sup> <a href="/wiki/Dietrich_Mateschitz" title="Dietrich Mateschitz">Dietrich Mateschitz</a> was inspired by an already existing drink called <a href="/wiki/Krating_Daeng" title="Krating Daeng">Krating Daeng</a> which he discovered in Thailand. He took this idea, and to suit the tastes of Westerners, modified the ingredients,<sup id="cite_ref-3" class="reference"><a href="#cite_note-3"><span>[</span>4<span>]</span></a></sup> and founded <a href="/wiki/Austria" title="Austria">Austrian</a> <a href="/wiki/Red_Bull_GmbH" title="Red Bull GmbH">Red Bull GmbH</a> in partnership with <a href="/wiki/Chaleo_Yoovidhya" title="Chaleo Yoovidhya">Chaleo Yoovidhya</a>. <a href="/wiki/Chaleo_Yoovidhya" title="Chaleo Yoovidhya">Chaleo Yoovidhya</a> invented the <a href="/wiki/Thailand" title="Thailand">Thai</a> energy drink <a href="/wiki/Krating_Daeng" title="Krating Daeng">Krating Daeng</a>; in <a href="/wiki/Thai_language" title="Thai language">Thai</a> <i>daeng</i> is red, and <i>krating</i> is the reddish brown <a href="/wiki/Bovine" title="Bovine" class="mw-redirect">bovine</a>, <a href="/wiki/Gaur" title="Gaur">gaur</a>, an animal slightly larger than the <a href="/wiki/Bison" title="Bison">bison</a>. Red Bull is sold in a tall and slim blue-silver can. <a href="/wiki/Krating_Daeng" title="Krating Daeng">Krating Daeng</a> is sold in <a href="/wiki/Thailand" title="Thailand">Thailand</a> and in some parts of <a href="/wiki/Asia" title="Asia">Asia</a> in a wider gold can with the name of <a href="/wiki/Krating_Daeng" title="Krating Daeng">Krating Daeng</a> or Red Bull Classic.<sup id="cite_ref-4" class="reference"><a href="#cite_note-4"><span>[</span>5<span>]</span></a></sup> Both are different products produced separately.</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="page-wrap">
+          <div id="page2" class="page">
+            <div class="page-contentwrap">
+              <h1>Caffeine</h1>
+              <img src="images/caffeine.svg" style="width: 80%" />
+              <p><b>Caffeine</b> is a bitter, white <a href="/wiki/Crystalline" title="Crystalline" class="mw-redirect">crystalline</a> <a href="/wiki/Xanthine" title="Xanthine">xanthine</a> <a href="/wiki/Alkaloid" title="Alkaloid">alkaloid</a> that acts as a <a href="/wiki/Stimulant" title="Stimulant">stimulant</a> drug. Caffeine is found in varying quantities in the seeds, leaves, and fruit of some plants, where it acts as a natural pesticide that paralyzes and kills certain insects feeding on the plants. It is most commonly consumed by humans in infusions extracted from the bean of the <a href="/wiki/Coffea_arabica" title="Coffea arabica">coffee plant</a> and the leaves of the <a href="/wiki/Camellia_sinensis" title="Camellia sinensis">tea bush</a>, as well as from various foods and drinks containing products derived from the <a href="/wiki/Kola_nut" title="Kola nut">kola nut</a>. Other sources include <a href="/wiki/Yerba_mat%C3%A9" title="Yerba maté">yerba maté</a>, <a href="/wiki/Guarana" title="Guarana">guarana</a> berries, <a href="/wiki/Ilex_guayusa" title="Ilex guayusa">guayusa</a>, and the <a href="/wiki/Ilex_vomitoria" title="Ilex vomitoria">yaupon holly</a>.</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="page-wrap">
+          <div id="page1" class="page">
+            <div class="page-contentwrap">
+              <h1>Ways to Get Caffeine</h1>
+              <img src="images/me.jpg" style="width: 100%" />
+            </div>
+          </div>
+        </div>
+        
+        <div class="back-wrap">
+          <div class="white-wrap">
+            <div class="white"></div>
+          </div>
+          <div class="fold-wrap">
+            <div class="fold-shader"></div>
+          </div>
+        </div>
+        <div class="back-wrap">
+          <div class="white-wrap">
+            <div class="white"></div>
+          </div>
+          <div class="fold-wrap">
+            <div class="fold-shader"></div>
+          </div>
+        </div>
+        <div class="back-wrap">
+          <div class="white-wrap">
+            <div class="white"></div>
+          </div>
+          <div class="fold-wrap">
+            <div class="fold-shader"></div>
+          </div>
+        </div>
+        <div class="back-wrap">
+          <div class="white-wrap">
+            <div class="white"></div>
+          </div>
+          <div class="fold-wrap">
+            <div class="fold-shader"></div>
+          </div>
+        </div>
+        <div class="back-wrap">
+          <div class="white-wrap">
+            <div class="white"></div>
+          </div>
+          <div class="fold-wrap">
+            <div class="fold-shader"></div>
+          </div>
+        </div>
+        <div class="back-wrap">
+          <div class="white-wrap">
+            <div class="white"></div>
+          </div>
+          <div class="fold-wrap">
+            <div class="fold-shader"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="buttons">
+      <button id="prev">Previous Page</button>
+      <button id="flipfront">Flip to front</button>
+      <button id="flipback">Flip to back</button>
+      <button id="next">Next Page</button>
+    </div>
+  </body>
 </html>
